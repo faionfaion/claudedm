@@ -1,0 +1,11 @@
+# Ignore everything by default
+*
+
+# But track skills and commands
+!skills/
+!skills/**
+!commands/
+!commands/**
+
+# Track gitignore itself
+!.gitignore

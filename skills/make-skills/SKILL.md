@@ -1,0 +1,218 @@
+---
+name: make-skills
+description: Creates, edits, updates, or modifies Claude Code skills. Use when user asks to create skill, edit skill, update skill, change skill, modify skill, fix skill, improve skill, add to skill. Triggers on "skill", "SKILL.md", "agent skill".
+allowed-tools: Read, Write, Edit, Bash(mkdir:*), Bash(rm:*), Bash(ls:*), Glob
+---
+
+# Creating or Updating Skills
+
+**Communication with user: Ukrainian. Skill content: English.**
+
+## When to Use This Skill
+
+**ALWAYS use this skill when user asks to:**
+- Create a new skill
+- Edit/update/change/modify existing skill
+- Fix or improve a skill
+- Add functionality to a skill
+
+**Trigger phrases:** "create skill", "edit skill", "change skill", "update skill", "modify skill", "fix skill", "skill", "SKILL.md", "зміни скіл", "оновити скіл", "додай до скіла"
+
+---
+
+## Token Economy Rules (CRITICAL)
+
+Skills consume context window. Every token must earn its place.
+
+**DO:**
+- Use bullet lists instead of tables
+- Use simple markdown without ASCII art borders
+- Write in English (smaller tokens than Ukrainian)
+- Keep SKILL.md under 300 lines (ideal), max 500
+- Challenge each line: "Does Claude need this?"
+
+**DON'T:**
+- ASCII borders like `+----+----+` or `|    |    |`
+- Verbose explanations Claude already knows
+- Tables where lists work
+- Emojis unless user requests
+
+## Skills vs Commands
+
+**Skill** - automatic discovery, complex workflows, multiple files
+**Command** - manual `/invoke`, accepts arguments, single file
+
+---
+
+## Skill Structure
+
+```
+skill-name/
+├── SKILL.md         # Required
+├── reference.md     # Optional - details
+└── scripts/         # Optional - utilities
+```
+
+---
+
+## SKILL.md Frontmatter
+
+```yaml
+---
+name: skill-name              # lowercase, hyphens, max 64 chars
+description: Third-person description with trigger keywords. Max 1024 chars.
+allowed-tools: Read, Grep, Glob, Bash(cmd:*)  # Optional
+model: claude-sonnet-4-20250514               # Optional
+---
+```
+
+**Required:** name, description
+**Optional:** allowed-tools, model
+
+---
+
+## Built-in Tools
+
+**File tools (no permission):**
+- Read - read file contents
+- Glob - find files by pattern
+- Grep - search with regex
+
+**File tools (permission required):**
+- Write - create/overwrite files
+- Edit - targeted edits
+- NotebookEdit - Jupyter cells
+
+**Execution:**
+- Bash - shell commands (permission)
+- Task - sub-agent (no permission)
+- Skill - another skill (permission)
+
+**Web:**
+- WebFetch - fetch URL (permission)
+- WebSearch - search (permission)
+
+**Other:**
+- LSP - language server (permission)
+- AskUserQuestion - multiple choice (no permission)
+- TodoWrite - task lists (no permission)
+
+---
+
+## allowed-tools Syntax
+
+Basic: `allowed-tools: Read, Grep, Glob`
+
+Bash prefix matching:
+- `Bash(git:*)` - all git commands
+- `Bash(python -m pytest:*)` - pytest with args
+
+WebFetch domain: `WebFetch(domain:github.com)`
+
+Combined: `allowed-tools: Read, Bash(git:*), WebFetch(domain:github.com)`
+
+**Note:** Pattern is PREFIX match, not regex. Without `:*` requires exact match.
+
+---
+
+## Description Rules
+
+**Third person only:**
+- Good: "Processes Excel files and generates reports"
+- Bad: "I can help you process Excel files"
+
+**Include trigger keywords:**
+- Good: "Extracts text from PDFs, fills forms, merges documents. Use when working with PDF files."
+- Bad: "Helps with documents"
+
+---
+
+## Naming Convention
+
+Anthropic recommends gerund form (verb + -ing):
+- Best: `processing-pdfs`, `analyzing-spreadsheets`
+- Good: `pdf-processing`, `code-review`
+- Bad: `CodeReview`, `my_skill`, `helper`, `utils`
+
+---
+
+## SKILL.md Body Template
+
+```markdown
+# Skill Title
+
+**Communication with user: Ukrainian. Skill content: English.**
+
+## Purpose
+One sentence.
+
+## Workflow
+1. Step one
+2. Step two
+3. Step three
+
+## Degrees of Freedom
+- High: decision X
+- Low: must follow Y exactly
+
+## Failed Attempts
+- Approach A - why it fails
+- Approach B - why it fails
+
+## Sources
+- Reference 1
+- Reference 2
+```
+
+---
+
+## Skill Locations
+
+- Personal: `~/.claude/skills/skill-name/`
+- Project: `.claude/skills/skill-name/`
+
+Project overrides personal with same name.
+
+---
+
+## Creation Process
+
+1. Ask requirements: purpose, triggers, tools, scope
+2. Create directory: `mkdir -p ~/.claude/skills/skill-name`
+3. Write SKILL.md with token-efficient structure
+4. Add reference.md if needed (split large content)
+
+---
+
+## Troubleshooting
+
+- Skill not triggering → more specific description with keywords
+- YAML error → use spaces not tabs, check `---` delimiters
+- Skill not found → file must be exactly `SKILL.md` (case-sensitive)
+- Tools not working → use `:*` suffix for Bash patterns
+
+---
+
+## Advanced Patterns
+
+**Failed Attempts section:**
+Document what doesn't work. From Anthropic: "Failure paths save more time than success paths."
+
+**Degrees of Freedom:**
+- High freedom: multiple valid approaches
+- Medium: preferred pattern exists
+- Low: fragile operations, exact steps required
+
+**One level deep references:**
+SKILL.md → reference.md (good)
+SKILL.md → advanced.md → details.md (bad - may be partially read)
+
+**MCP tools:** Use full names `ServerName:tool_name`
+
+---
+
+## Sources
+
+- [Claude Code Skills](https://code.claude.com/docs/en/skills)
+- [Skill Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
+- [Anthropic Skills Repo](https://github.com/anthropics/skills)
