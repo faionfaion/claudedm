@@ -46,8 +46,8 @@ Orchestrator for sequential task execution:
 Run the discovery scripts:
 
 ```bash
-bash ~/.claude/skills/donexttask/scripts/find-tasks.sh
-bash ~/.claude/skills/donexttask/scripts/read-task-summaries.sh
+bash $HOME/.claude/skills/donexttask/scripts/find-tasks.sh
+bash $HOME/.claude/skills/donexttask/scripts/read-task-summaries.sh
 ```
 
 If no tasks found, report "Черга тасків порожня!" and STOP.
@@ -78,7 +78,7 @@ Result: SOURCE = selected source
 ```bash
 PROJECT="epass"
 FEATURE="<feature-name>"
-SDD_BASE="~/aidocs/sdd/${PROJECT}"
+SDD_BASE="$HOME/aidocs/sdd/${PROJECT}"
 ```
 
 ### Read in this order:
@@ -129,7 +129,7 @@ After reading tasks and SDD context, identify ANY ambiguities:
 **Check current state:**
 
 ```bash
-cd ~/epass
+cd $HOME/epass
 git rev-parse --abbrev-ref HEAD
 git status --short
 ```
@@ -304,7 +304,7 @@ After ALL tasks are completed, perform these quality checks:
 Review all changes made in this batch:
 
 ```bash
-cd ~/epass
+cd $HOME/epass
 git diff main..HEAD
 ```
 
@@ -318,7 +318,7 @@ Look for:
 ### 6.2 Test Coverage Check
 
 ```bash
-cd ~/epass
+cd $HOME/epass
 make test-dev
 ```
 
@@ -330,7 +330,7 @@ If tests fail:
 ### 6.3 Quality Checks
 
 ```bash
-cd ~/epass
+cd $HOME/epass
 make fix  # autoflake + isort + black + flake8
 ```
 

@@ -338,6 +338,6 @@ Files created in module directory:
 
 ## Sources
 
-- Guidelines: `/home/moskalyuk_ruslan/epass/DOCUMENTATION_GUIDELINES.md`
-- Example: `/home/moskalyuk_ruslan/epass/app/applications/customer/AGENTS.md`
-- E-Pass conventions: `/home/moskalyuk_ruslan/epass/AGENTS.md`
+- Guidelines: `$HOME/epass/DOCUMENTATION_GUIDELINES.md`
+- Example: `$HOME/epass/app/applications/customer/AGENTS.md`
+- E-Pass conventions: `$HOME/epass/AGENTS.md`

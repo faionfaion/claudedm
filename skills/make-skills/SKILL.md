@@ -168,7 +168,7 @@ One sentence.
 
 ## Skill Locations
 
-- Personal: `~/.claude/skills/skill-name/`
+- Personal: `$HOME/.claude/skills/skill-name/`
 - Project: `.claude/skills/skill-name/`
 
 Project overrides personal with same name.
@@ -178,7 +178,7 @@ Project overrides personal with same name.
 ## Creation Process
 
 1. Ask requirements: purpose, triggers, tools, scope
-2. Create directory: `mkdir -p ~/.claude/skills/skill-name`
+2. Create directory: `mkdir -p $HOME/.claude/skills/skill-name`
 3. Write SKILL.md with token-efficient structure
 4. Add reference.md if needed (split large content)
 

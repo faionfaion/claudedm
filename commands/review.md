@@ -20,7 +20,7 @@ This ensures thorough analysis without context limitations.
 
 ## Context
 
-1. Navigate to project directory: `/home/moskalyuk_ruslan/$ARGUMENTS`
+1. Navigate to project directory: `$HOME/$ARGUMENTS`
 2. Identify current branch and compare it with `main`
 3. Get list of all changed files: `git diff main...HEAD --name-only`
 4. Get full diff: `git diff main...HEAD`

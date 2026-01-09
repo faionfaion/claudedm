@@ -2,11 +2,11 @@
 # Find all tasks from both global and feature-specific locations
 # Priority: in_progress > todo
 
-echo "=== GLOBAL IN_PROGRESS (~/aitasks/in_progress/) ==="
+echo "=== GLOBAL IN_PROGRESS (\$HOME/aitasks/in_progress/) ==="
 find $HOME/aitasks/in_progress/ -name "TASK_*.md" 2>/dev/null | sort -V
 
 echo ""
-echo "=== GLOBAL TODO (~/aitasks/todo/) ==="
+echo "=== GLOBAL TODO (\$HOME/aitasks/todo/) ==="
 find $HOME/aitasks/todo/ -name "TASK_*.md" 2>/dev/null | sort -V
 
 echo ""

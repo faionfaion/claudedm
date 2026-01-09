@@ -2,7 +2,7 @@
 <!-- SUMMARY: Додати поле crm_allowed до SupportStatus для фільтрації статусів доступних CRM -->
 ## Complexity: simple
 ## Created: 2025-12-06
-## Project: /home/moskalyuk_ruslan/epass/app/applications/customer
+## Project: $HOME/epass/app/applications/customer
 
 ## Description
 Додати boolean поле `crm_allowed` до моделі SupportStatus для визначення які статуси можуть бути встановлені через CRM API.

@@ -56,7 +56,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(cat:*), Bash(git 
 ### SDD Directory Structure
 
 ```
-~/aidocs/sdd/
+$HOME/aidocs/sdd/
 ├── CLAUDE.md                          # SDD overview
 ├── SDD_WORKFLOW.md                    # Детальний workflow
 ├── SPEC_TEMPLATE.md                   # Шаблон spec.md
@@ -194,12 +194,12 @@ The assistant presents the draft:
 
 The assistant saves the file to:
 ```
-~/aidocs/sdd/{project_name}/constitution.md
+$HOME/aidocs/sdd/{project_name}/constitution.md
 ```
 
 Create directory if needed:
 ```bash
-mkdir -p ~/aidocs/sdd/{project_name}
+mkdir -p $HOME/aidocs/sdd/{project_name}
 ```
 
 ---
@@ -223,11 +223,11 @@ mkdir -p ~/aidocs/sdd/{project_name}
 
 File `constitution.md` at:
 ```
-~/aidocs/sdd/{project_name}/constitution.md
+$HOME/aidocs/sdd/{project_name}/constitution.md
 ```
 
 **Next step:** Після approve constitution.md → створюй фічі:
-1. Створи директорію фічі: `mkdir -p ~/aidocs/sdd/{project}/features/{feature}/tasks/{todo,in_progress,done}`
+1. Створи директорію фічі: `mkdir -p $HOME/aidocs/sdd/{project}/features/{feature}/tasks/{todo,in_progress,done}`
 2. Використай скіл `sdd-writing-specifications` для створення spec.md
 
 ---
