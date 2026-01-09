@@ -8,6 +8,82 @@ allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 **Communication with user: Ukrainian. Spec content: Ukrainian.**
 
+---
+
+## SDD Framework Overview
+
+Цей скіл є частиною **Spec-Driven Development (SDD)** фреймворку.
+
+### Філософія SDD
+
+**"Intent is the source of truth"** — специфікація є головним артефактом, код — лише її реалізація.
+
+### SDD Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 1: SPECIFICATION (Human + AI) ← ВИ ТУТ                   │
+│                                                                 │
+│  1. Створити feature directory                                  │
+│  2. Написати spec.md (цей скіл)                                │
+│  3. Review & approve                                            │
+│                                                                 │
+│  Output: spec.md (status: approved)                            │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 2: DESIGN (AI-assisted)                                  │
+│  → Скіл: sdd-writing-design-docs                               │
+│  Output: design.md                                              │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 3: TASK CREATION (AI) → /maketasks                      │
+│  Output: tasks/todo/TASK_*.md                                  │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 4: EXECUTION (AI) → /donexttask, /doalltasks            │
+│  Output: Code + Tests + Commits                                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### SDD Directory Structure
+
+```
+~/aidocs/sdd/
+├── CLAUDE.md                          # SDD overview
+├── SDD_WORKFLOW.md                    # Детальний workflow
+├── SPEC_TEMPLATE.md                   # Шаблон spec.md
+├── DESIGN_TEMPLATE.md                 # Шаблон design.md
+├── CONSTITUTION_TEMPLATE.md           # Шаблон constitution.md
+├── TASK_EXECUTION.md                  # Процес виконання тасків
+└── {project}/                         # epass, billing, etc.
+    ├── constitution.md                # Принципи проекту
+    └── features/
+        └── {feature-name}/            # kebab-case
+            ├── spec.md                # ЩО і ЧОМУ ← створюємо тут
+            ├── design.md              # ЯК (архітектура)
+            └── tasks/                 # Задачі
+                ├── todo/
+                ├── in_progress/
+                └── done/
+```
+
+### Key SDD Documents
+
+| Document | Призначення | Створюється |
+|----------|------------|-------------|
+| `constitution.md` | Принципи проекту, стандарти | Один раз на проект |
+| `spec.md` | ЩО і ЧОМУ (бізнес вимоги) | Для кожної фічі (цей скіл) |
+| `design.md` | ЯК (технічна реалізація) | Після approve spec.md |
+| `TASK_*.md` | Атомарні задачі | Після approve design.md |
+
+---
+
 ## When to Use This Skill
 
 **ALWAYS use this skill when user asks to:**
@@ -52,9 +128,9 @@ Investigate existing code to identify:
 - Similar feature implementations
 
 Key locations:
-- Models: `/home/moskalyuk_ruslan/epass/app/applications/`
+- Models: `~/epass/app/applications/`
 - Services: `services.py` files in application directories
-- Project conventions: `/home/moskalyuk_ruslan/epass/app/CLAUDE.md`
+- Project conventions: `~/epass/app/CLAUDE.md`
 
 ### Phase 3: Clarify Details
 
@@ -85,10 +161,19 @@ Present draft to user:
 ### Phase 6: Save Specification
 
 Create directory structure and save:
+
+```bash
+# Базовий шлях
+SDD_BASE="~/aidocs/sdd"
+
+# Створити директорії
+mkdir -p ${SDD_BASE}/{project}/features/{feature_name}/tasks/{todo,in_progress,done}
+
+# Зберегти spec.md
+# ${SDD_BASE}/{project}/features/{feature_name}/spec.md
 ```
-/aidocs/sdd/{project}/features/{feature_name}/spec.md
-/aidocs/sdd/{project}/features/{feature_name}/tasks/{todo,in_progress,done}/
-```
+
+**Повний шлях:** `~/aidocs/sdd/{project}/features/{feature_name}/spec.md`
 
 ---
 
@@ -96,8 +181,10 @@ Create directory structure and save:
 
 File `spec.md` at:
 ```
-/aidocs/sdd/{project}/features/{feature_name}/spec.md
+~/aidocs/sdd/{project}/features/{feature_name}/spec.md
 ```
+
+**Next step:** Після approve spec.md → використовуй скіл `sdd-writing-design-docs` для створення design.md
 
 ---
 

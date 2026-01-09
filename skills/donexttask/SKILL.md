@@ -25,8 +25,8 @@ Autonomous task execution workflow:
 | (none) | Ask user for source | `/donexttask` |
 
 Task paths:
-- Global: `/home/moskalyuk_ruslan/aitasks/`
-- Feature: `/home/moskalyuk_ruslan/aidocs/sdd/projects/{project}/features/{feature}/tasks/`
+- Global: `~/aitasks/`
+- Feature: `~/aidocs/sdd/{project}/features/{feature}/tasks/`
 
 ## Failed Attempts
 
@@ -57,8 +57,8 @@ Subagent must NOT:
 ### Step 1: Determine Task Source
 
 If parameter provided:
-- `global` -> TASKS_DIR="/home/moskalyuk_ruslan/aitasks"
-- `feature:epass/x` -> TASKS_DIR="/home/moskalyuk_ruslan/aidocs/sdd/projects/epass/features/x/tasks"
+- `global` -> TASKS_DIR="~/aitasks"
+- `feature:epass/x` -> TASKS_DIR="~/aidocs/sdd/epass/features/x/tasks"
 
 If no parameter, run discovery script and ask user to select source.
 
@@ -74,7 +74,7 @@ Output subagent summary to user.
 
 Project context:
 - Project: E-Pass electronic transport payment system
-- Working directory: `/home/moskalyuk_ruslan/epass`
+- Working directory: `~/epass`
 - Tech stack: Django 4.2+, Python 3.11+, PostgreSQL, pytest
 - Tasks directory: `{TASKS_DIR}` (from orchestrator)
 

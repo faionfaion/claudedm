@@ -71,12 +71,65 @@ Result: SOURCE = selected source
 
 ---
 
+## PHASE 2.5: Read SDD Context (for feature tasks)
+
+**If SOURCE is a feature (not global), read SDD documents BEFORE execution:**
+
+```bash
+PROJECT="epass"
+FEATURE="<feature-name>"
+SDD_BASE="~/aidocs/sdd/${PROJECT}"
+```
+
+### Read in this order:
+
+1. **Constitution (project standards):**
+   ```bash
+   cat "${SDD_BASE}/constitution.md"
+   ```
+
+2. **Feature specification (requirements):**
+   ```bash
+   cat "${SDD_BASE}/features/${FEATURE}/spec.md"
+   ```
+
+3. **Feature design (technical design):**
+   ```bash
+   cat "${SDD_BASE}/features/${FEATURE}/design.md"
+   ```
+
+Store this context - it will be passed to subagents for each task.
+
+---
+
+## PHASE 2.7: Clarifying Questions (BEFORE execution!)
+
+**ВСІ уточнюючі питання задаються ДО початку виконання!**
+
+After reading tasks and SDD context, identify ANY ambiguities:
+
+1. Review each task for unclear requirements
+2. Check if SDD documents have conflicting information
+3. Identify missing dependencies or prerequisites
+
+**If questions exist:**
+- Use AskUserQuestion tool to ask ALL questions at once
+- Wait for user answers
+- Document decisions for subagents
+
+**If no questions:**
+- Proceed directly to PHASE 3
+
+**CRITICAL: After this phase, NO more questions until all tasks complete!**
+
+---
+
 ## PHASE 3: Create Feature Branch
 
 **Check current state:**
 
 ```bash
-cd /home/moskalyuk_ruslan/epass
+cd ~/epass
 git rev-parse --abbrev-ref HEAD
 git status --short
 ```
@@ -108,28 +161,87 @@ If on main, pull latest then create branch. Report the branch name and reasoning
 BATCH_START=$(date +%s)
 ```
 
-### Execute Loop
+### Execute Loop - КОЖЕН ТАСК В ОКРЕМОМУ САБАГЕНТІ!
+
+**CRITICAL: Ви ПОВИННІ використовувати Task tool для КОЖНОГО таску!**
 
 For each task in the selected source:
 
 1. `TASK_START=$(date +%s)`
 2. Report: "[N/total] Виконую TASK_XXX..."
-3. Launch subagent via Task tool
-4. `TASK_END=$(date +%s)`
-5. `DURATION=$((TASK_END - TASK_START))`
-6. Convert: `MIN=$((DURATION / 60))` `SEC=$((DURATION % 60))`
-7. Report: "TASK_XXX завершено за ${MIN}m ${SEC}s"
+3. **ОБОВ'ЯЗКОВО: Launch Task tool with subagent_type="general-purpose"**
+4. **WAIT for subagent to complete before continuing**
+5. `TASK_END=$(date +%s)`
+6. `DURATION=$((TASK_END - TASK_START))`
+7. Convert: `MIN=$((DURATION / 60))` `SEC=$((DURATION % 60))`
+8. Report: "TASK_XXX завершено за ${MIN}m ${SEC}s"
+9. **ONLY THEN proceed to next task**
 
-**Subagent prompt:**
-- "Execute task from SOURCE using /donexttask skill"
-- "Work fully autonomously - do not ask user questions"
-- "Complete the task including commit and moving to done"
+### Task Tool Call Format (MANDATORY!)
+
+For each task, you MUST call:
+
+```
+Task tool:
+  subagent_type: "general-purpose"
+  description: "Execute TASK_XXX"
+  prompt: |
+    You are executing a task from the E-Pass task queue.
+
+    TASK SOURCE: {SOURCE}
+    TASKS_DIR: {TASKS_DIR}
+
+    ## SDD Context (for feature tasks):
+    {Include constitution.md, spec.md, design.md content here if feature task}
+
+    ## Clarifications from user:
+    {Include any answers from PHASE 2.7 here}
+
+    Execute this task using the /donexttask skill:
+    1. Call Skill tool with skill="donexttask" and args="{SOURCE}"
+    2. Wait for full completion
+    3. Return the result
+
+    CRITICAL RULES:
+    - Work fully autonomously - do NOT ask user questions
+    - If blocked, return BLOCKED status with reason - do NOT ask user
+    - Complete the task including commit and moving to done
+    - Follow SDD constitution and design patterns
+```
+
+---
+
+### ⚠️ AUTONOMOUS EXECUTION MODE
+
+**Під час виконання тасків (PHASE 4) НЕ ЗУПИНЯЄМОСЬ!**
+
+- Сабагенти працюють автономно без питань до користувача
+- Якщо таск має проблему - повертається статус BLOCKED/FAILED
+- Оркестратор переходить до наступного таску
+- Питання збираються в кінці, а не під час виконання
+- Зупинка лише при КРИТИЧНІЙ блокуючій проблемі (git conflict, build broken)
+
+**Блокуючі проблеми (зупинити виконання):**
+- Git merge conflict
+- Build completely broken (can't compile)
+- Missing critical dependency
+- Security vulnerability discovered
+
+**НЕ блокуючі (продовжувати виконання):**
+- One task failed - skip and continue
+- Test failures in one task - document and continue
+- Unclear requirements - use best judgment, document decision
+
+---
 
 **Key behaviors:**
-- Subagent calls `/donexttask {SOURCE}` and handles everything
+- КОЖЕН таск виконується в ОКРЕМОМУ сабагенті через Task tool
+- Чекаємо завершення сабагента перед запуском наступного
+- Subagent calls /donexttask skill and handles everything
 - Subagent creates commit and moves task to done
 - Orchestrator tracks progress, timing, and launches next agent
-- Never ask user for input during execution
+- НІКОЛИ не запускаємо наступний таск поки не завершився попередній
+- **НЕ зупиняємось для питань - все питання задані в PHASE 2.7**
 
 ---
 
@@ -172,9 +284,77 @@ git diff main..HEAD --stat
 4. Branch name
 5. Commit count and hashes
 6. Changed files summary
-7. Next steps: `git push -u origin <branch>` and `glab mr create --fill`
+7. **🔍 Review results** (issues found and fixed)
+8. **✅ Test results** (pass/fail count)
+9. **🔧 Additional fixes** (if any)
+10. Next steps: `git push -u origin <branch>` and `glab mr create --fill`
 
 **Do NOT push, merge, or ask user for confirmation.**
+
+---
+
+## PHASE 6: Final Review and Quality Check
+
+### Обов'язкове фінальне ревью після виконання всіх тасків!
+
+After ALL tasks are completed, perform these quality checks:
+
+### 6.1 Code Review
+
+Review all changes made in this batch:
+
+```bash
+cd ~/epass
+git diff main..HEAD
+```
+
+Look for:
+- Code style issues
+- Potential bugs or logic errors
+- Missing imports or broken references
+- Security vulnerabilities
+- Performance issues
+
+### 6.2 Test Coverage Check
+
+```bash
+cd ~/epass
+make test-dev
+```
+
+If tests fail:
+1. Identify which tests are failing
+2. Fix the issues
+3. Create additional commit: `fix: resolve test failures after batch execution`
+
+### 6.3 Quality Checks
+
+```bash
+cd ~/epass
+make fix  # autoflake + isort + black + flake8
+```
+
+If there are auto-fixes:
+1. Review the changes
+2. Commit if needed: `style: apply code formatting after batch execution`
+
+### 6.4 Important Issues Fix
+
+If during review you find **critical issues**:
+- Missing test coverage for new code
+- Obvious bugs that slipped through
+- Security vulnerabilities
+- Broken functionality
+
+**Fix them immediately** and commit: `fix: address issues found during batch review`
+
+### 6.5 Final Summary Report
+
+Add to final report:
+- Review findings (if any)
+- Test results (pass/fail count)
+- Additional fixes made
+- Overall code quality assessment
 
 ---
 
@@ -182,18 +362,45 @@ git diff main..HEAD --stat
 
 **Orchestrator responsibilities:**
 - Read task summaries
+- **Read SDD context (constitution, spec, design) for feature tasks**
+- **Ask ALL clarifying questions BEFORE execution (PHASE 2.7)**
 - Create meaningful branch name
-- Launch Task subagents sequentially
+- **Launch Task tool with subagent_type="general-purpose" for EACH task**
+- **Pass SDD context and clarifications to each subagent**
+- **Wait for each subagent to complete before starting next**
 - **⏱️ Track execution time for EACH task**
-- Track progress
+- Track progress - **continue even if task fails (unless blocking)**
+- **After all tasks: run final review and quality checks (PHASE 6)**
 - **⏱️ Generate final report WITH timing list and total time**
 
-**Subagent responsibilities:**
-- Call /donexttask skill
+**Subagent responsibilities (via Task tool):**
+- Call /donexttask skill with Skill tool
 - Execute task fully
 - Create commit
 - Move task to done
 - Return summary
+
+**Execution flow:**
+```
+PHASE 1:   Find tasks
+PHASE 2:   Select source
+PHASE 2.5: Read SDD (constitution, spec, design) - for feature tasks
+PHASE 2.7: Ask ALL clarifying questions - BEFORE execution
+PHASE 3:   Create branch
+PHASE 4:   FOR EACH task (AUTONOMOUS - NO STOPS!):
+           -> Task tool (subagent_type="general-purpose")
+           -> Pass SDD context + clarifications
+           -> Wait for completion
+           -> Record timing
+           -> Next task (even if previous failed)
+PHASE 5:   Generate report
+PHASE 6:   Review + Tests + Fix issues
+```
+
+**Question timing:**
+- PHASE 2.7: ALL questions asked here
+- PHASE 4: NO questions, fully autonomous
+- PHASE 6: Issues collected, reported at end
 
 ---
 

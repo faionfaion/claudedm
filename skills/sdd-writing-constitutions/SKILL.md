@@ -8,6 +8,86 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(cat:*), Bash(git 
 
 **Communication with user: Ukrainian. Constitution content: Ukrainian.**
 
+---
+
+## SDD Framework Overview
+
+Цей скіл є частиною **Spec-Driven Development (SDD)** фреймворку.
+
+### Філософія SDD
+
+**"Intent is the source of truth"** — специфікація є головним артефактом, код — лише її реалізація.
+
+### SDD Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 0: CONSTITUTION (One-time per project) ← ВИ ТУТ         │
+│                                                                 │
+│  1. Проаналізувати codebase                                     │
+│  2. Створити constitution.md (цей скіл)                        │
+│  3. Review & approve                                            │
+│                                                                 │
+│  Output: constitution.md (project standards)                    │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 1: SPECIFICATION (per feature)                           │
+│  → Скіл: sdd-writing-specifications                            │
+│  Output: spec.md                                                │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 2: DESIGN (per feature)                                  │
+│  → Скіл: sdd-writing-design-docs                               │
+│  Output: design.md                                              │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 3-4: TASKS + EXECUTION                                   │
+│  → /maketasks, /donexttask, /doalltasks                        │
+│  Output: Code + Tests + Commits                                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### SDD Directory Structure
+
+```
+~/aidocs/sdd/
+├── CLAUDE.md                          # SDD overview
+├── SDD_WORKFLOW.md                    # Детальний workflow
+├── SPEC_TEMPLATE.md                   # Шаблон spec.md
+├── DESIGN_TEMPLATE.md                 # Шаблон design.md
+├── CONSTITUTION_TEMPLATE.md           # Шаблон constitution.md ← використовуй!
+├── TASK_EXECUTION.md                  # Процес виконання тасків
+└── {project}/                         # epass, billing, etc.
+    ├── constitution.md                # Принципи проекту ← створюємо тут
+    └── features/
+        └── {feature-name}/
+            ├── spec.md
+            ├── design.md
+            └── tasks/
+```
+
+### Роль Constitution
+
+**Constitution.md — незмінні принципи проекту, які діють для ВСІХ фіч.**
+
+Він визначає:
+- Technology stack
+- Code standards (linters, formatters, naming)
+- Architecture patterns
+- Testing requirements
+- Git workflow
+- API standards
+
+**Кожен design.md та task ПОВИНЕН відповідати constitution!**
+
+---
+
 ## When to Use This Skill
 
 **ALWAYS use this skill when user asks to:**
@@ -114,7 +194,12 @@ The assistant presents the draft:
 
 The assistant saves the file to:
 ```
-/aidocs/sdd/{project_name}/constitution.md
+~/aidocs/sdd/{project_name}/constitution.md
+```
+
+Create directory if needed:
+```bash
+mkdir -p ~/aidocs/sdd/{project_name}
 ```
 
 ---
@@ -136,10 +221,14 @@ The assistant saves the file to:
 
 ## Output
 
-File `constitution.md` in project directory:
+File `constitution.md` at:
 ```
-/aidocs/sdd/{project_name}/constitution.md
+~/aidocs/sdd/{project_name}/constitution.md
 ```
+
+**Next step:** Після approve constitution.md → створюй фічі:
+1. Створи директорію фічі: `mkdir -p ~/aidocs/sdd/{project}/features/{feature}/tasks/{todo,in_progress,done}`
+2. Використай скіл `sdd-writing-specifications` для створення spec.md
 
 ---
 

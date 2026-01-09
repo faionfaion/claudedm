@@ -8,6 +8,84 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 **Communication with user: Ukrainian. Design content: Ukrainian.**
 
+---
+
+## SDD Framework Overview
+
+Цей скіл є частиною **Spec-Driven Development (SDD)** фреймворку.
+
+### Філософія SDD
+
+**"Intent is the source of truth"** — специфікація є головним артефактом, код — лише її реалізація.
+
+### SDD Workflow
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 1: SPECIFICATION (Human + AI)                            │
+│  → Скіл: sdd-writing-specifications                            │
+│  Output: spec.md (status: approved)                            │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 2: DESIGN (AI-assisted) ← ВИ ТУТ                        │
+│                                                                 │
+│  1. Прочитати approved spec.md                                 │
+│  2. Прочитати constitution.md                                   │
+│  3. Дослідити codebase                                          │
+│  4. Написати design.md (цей скіл)                              │
+│  5. Review & approve                                            │
+│                                                                 │
+│  Output: design.md (approved)                                   │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 3: TASK CREATION (AI) → /maketasks                      │
+│  Output: tasks/todo/TASK_*.md                                  │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  PHASE 4: EXECUTION (AI) → /donexttask, /doalltasks            │
+│  Output: Code + Tests + Commits                                │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### SDD Directory Structure
+
+```
+~/aidocs/sdd/
+├── CLAUDE.md                          # SDD overview
+├── SDD_WORKFLOW.md                    # Детальний workflow
+├── SPEC_TEMPLATE.md                   # Шаблон spec.md
+├── DESIGN_TEMPLATE.md                 # Шаблон design.md ← використовуй!
+├── CONSTITUTION_TEMPLATE.md           # Шаблон constitution.md
+├── TASK_EXECUTION.md                  # Процес виконання тасків
+└── {project}/                         # epass, billing, etc.
+    ├── constitution.md                # Принципи проекту ← читай!
+    └── features/
+        └── {feature-name}/            # kebab-case
+            ├── spec.md                # ЩО і ЧОМУ ← читай!
+            ├── design.md              # ЯК ← створюємо тут
+            └── tasks/                 # Задачі
+                ├── todo/
+                ├── in_progress/
+                └── done/
+```
+
+### Key SDD Documents
+
+| Document | Призначення | Статус |
+|----------|------------|--------|
+| `constitution.md` | Принципи проекту | ЧИТАТИ перед design |
+| `spec.md` | ЩО і ЧОМУ | ЧИТАТИ, має бути approved |
+| `design.md` | ЯК реалізувати | СТВОРЮЄМО цим скілом |
+| `TASK_*.md` | Атомарні задачі | Створюються після design |
+
+---
+
 ## When to Use This Skill
 
 **ALWAYS use this skill when user asks to:**
@@ -38,8 +116,22 @@ Or:
 ## Prerequisites
 
 Before starting, verify:
+
+```bash
+SDD_BASE="~/aidocs/sdd"
+
+# 1. spec.md exists with status approved
+cat ${SDD_BASE}/{project}/features/{feature}/spec.md | grep -A1 "Status"
+
+# 2. constitution.md exists
+cat ${SDD_BASE}/{project}/constitution.md
+```
+
+**Required files:**
 1. `spec.md` exists with status `approved`
-2. Project `constitution.md` exists at `/aidocs/sdd/{project}/constitution.md`
+2. Project `constitution.md` exists at `~/aidocs/sdd/{project}/constitution.md`
+
+**If constitution.md doesn't exist:** Use скіл `sdd-writing-constitutions` to create it first.
 
 ## Workflow
 
@@ -63,7 +155,7 @@ Read project principles from constitution.md and extract:
 ### Phase 3: Research Codebase
 
 Use Grep and Glob tools to find related code:
-- Similar models in `/home/moskalyuk_ruslan/epass/app/applications/`
+- Similar models in `~/epass/app/applications/`
 - Similar services (services.py files)
 - Similar views (views.py files)
 - Existing patterns
@@ -169,7 +261,12 @@ This section helps future developers understand why certain paths were not taken
 
 ## Output
 
-File `design.md` in feature directory: `{feature_path}/design.md`
+File `design.md` at:
+```
+~/aidocs/sdd/{project}/features/{feature}/design.md
+```
+
+**Next step:** Після approve design.md → використовуй `/maketasks` для створення TASK_*.md файлів
 
 ## Checklist Before Completion
 

@@ -20,6 +20,36 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash(mkdir:*), Bash(ls:*), Bash(da
 
 ---
 
+## SDD Framework Context
+
+Цей скіл є частиною **Spec-Driven Development (SDD)** фреймворку.
+
+**Філософія SDD:** "Intent is the source of truth" — специфікація є головним артефактом, код — лише її реалізація.
+
+**Workflow:**
+```
+SPEC (Human) → DESIGN (AI) → TASKS (AI) → CODE (AI)
+```
+
+**Структура SDD:**
+```
+~/aidocs/sdd/{project}/
+├── constitution.md           # Принципи проекту (стандарти, патерни)
+└── features/{feature}/
+    ├── spec.md               # ЩО і ЧОМУ (бізнес вимоги)
+    ├── design.md             # ЯК (технічна реалізація)
+    └── tasks/                # Задачі
+        ├── todo/             # Очікують виконання
+        ├── in_progress/      # В роботі (макс 1)
+        └── done/             # Виконані
+```
+
+**Два типи тасків:**
+1. **Global tasks** — `~/aitasks/` (загальні задачі проекту)
+2. **Feature tasks** — `~/aidocs/sdd/{project}/features/{feature}/tasks/` (задачі для конкретної фічі)
+
+---
+
 Creates well-structured task files by delegating research and writing to a subagent.
 
 ---
@@ -47,16 +77,36 @@ TASK CREATION REQUEST:
 
 If structured input is provided, parse it. If invoked directly, ask the user what task to create.
 
-### STEP 2: Get Next Task Number
+### STEP 2: Get Next Task Number (CRITICAL!)
 
-Use Bash tool to get the date and find the last task number:
+**Нумерація ПОВИННА бути послідовною!** Не пропускай номери.
+
+#### Для Global Tasks:
 
 ```bash
 date "+%Y-%m-%d"
-ls /home/moskalyuk_ruslan/aitasks/todo/ /home/moskalyuk_ruslan/aitasks/in_progress/ /home/moskalyuk_ruslan/aitasks/done/ 2>/dev/null | grep -oE 'TASK_[0-9]+' | sort -t_ -k2 -n | tail -1
+ls ~/aitasks/todo/ ~/aitasks/in_progress/ ~/aitasks/done/ 2>/dev/null | grep -oE 'TASK_[0-9]+' | sort -t_ -k2 -n | tail -1
 ```
 
-If last is TASK_260, next is TASK_261.
+**Приклад:** Якщо останній `TASK_260`, наступний `TASK_261`.
+
+#### Для Feature Tasks (SDD):
+
+```bash
+date "+%Y-%m-%d"
+FEATURE_PATH="~/aidocs/sdd/{project}/features/{feature}/tasks"
+ls ${FEATURE_PATH}/todo/ ${FEATURE_PATH}/in_progress/ ${FEATURE_PATH}/done/ 2>/dev/null | grep -oE 'TASK_[0-9]+' | sort -t_ -k2 -n | tail -1
+```
+
+**Приклад:** Якщо в фічі останній `TASK_005`, наступний `TASK_006`.
+
+#### Правила нумерації:
+
+1. **Global tasks**: Глобальна нумерація (TASK_001...TASK_999)
+2. **Feature tasks**: Локальна нумерація в межах фічі (TASK_001...TASK_NNN)
+3. **Формат номера**: Завжди 3 цифри з leading zeros (001, 010, 100)
+4. **НІКОЛИ не пропускай номери** — якщо є 001, 002, 004, наступний 003, а не 005
+5. **Перевіряй ВСІ директорії**: todo + in_progress + done
 
 ### STEP 3: Generate File Name
 
@@ -91,7 +141,7 @@ Create a complete, well-structured task file:
 
 - **Task Number:** TASK_{NUMBER}
 - **File Name:** {TASK_FILENAME}
-- **File Path:** /home/moskalyuk_ruslan/aitasks/todo/{TASK_FILENAME}
+- **File Path:** ~/aitasks/todo/{TASK_FILENAME}
 - **Created Date:** {DATE}
 
 ### Input from Orchestrator
@@ -107,8 +157,35 @@ Create a complete, well-structured task file:
 ## Project Context
 
 - **Project:** E-Pass electronic transport payment system
-- **Working directory:** /home/moskalyuk_ruslan/epass
+- **Working directory:** ~/epass
 - **Tech stack:** Django 4.2+, Python 3.11+, PostgreSQL, pytest
+
+---
+
+## SDD Context (for Feature Tasks)
+
+If this is a **feature task** (not global), read SDD documents:
+
+1. **Constitution** (project standards):
+   ```
+   ~/aidocs/sdd/{project}/constitution.md
+   ```
+
+2. **Spec** (requirements):
+   ```
+   ~/aidocs/sdd/{project}/features/{feature}/spec.md
+   ```
+
+3. **Design** (technical approach):
+   ```
+   ~/aidocs/sdd/{project}/features/{feature}/design.md
+   ```
+
+**Use this context to:**
+- Follow project standards from constitution
+- Reference requirements from spec (FR-1, FR-2, etc.)
+- Use technical decisions from design (AD-1, AD-2, etc.)
+- Link task to specific files from design.md
 
 ---
 
@@ -122,6 +199,7 @@ Research the codebase before writing the task.
 2. **Read domain documentation** (app/CLAUDE.md, domain-specific CLAUDE.md files)
 3. **Find existing patterns** - how similar features are implemented
 4. **Check existing tasks** in todo/done directories
+5. **For SDD tasks**: Read constitution, spec, and design documents
 
 Document findings: related files, existing patterns, similar implementations.
 
@@ -150,7 +228,7 @@ Use Bash tool to verify the file was created and check first 6 lines.
 <!-- SUMMARY: One sentence describing what and why -->
 ## Complexity: simple/normal/complex
 ## Created: YYYY-MM-DD
-## Project: /home/moskalyuk_ruslan/epass
+## Project: ~/epass
 
 ## Description
 Clear explanation of what needs to be done.
@@ -206,7 +284,7 @@ Return structured result:
 
 STATUS: SUCCESS | FAILED
 TASK_FILE: TASK_XXX_name.md
-PATH: /home/moskalyuk_ruslan/aitasks/todo/TASK_XXX_name.md
+PATH: ~/aitasks/todo/TASK_XXX_name.md
 
 RESEARCH_FINDINGS:
 - Related files: N files discovered
@@ -248,7 +326,7 @@ Report to user:
 - Complexity: {complexity}
 - Related files: N found
 - Key criteria: criterion 1, criterion 2
-- Path: /home/moskalyuk_ruslan/aitasks/todo/TASK_XXX_name.md
+- Path: ~/aitasks/todo/TASK_XXX_name.md
 
 ### FAILED:
 
