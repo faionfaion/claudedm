@@ -43,11 +43,12 @@ Orchestrator for sequential task execution:
 
 ## PHASE 1: Find All Tasks
 
-Run the discovery scripts:
+Run the discovery scripts with base path:
 
 ```bash
-bash .claude/skills/donexttask/scripts/find-tasks.sh
-bash .claude/skills/donexttask/scripts/read-task-summaries.sh
+BASE_PATH="$HOME"  # or specific path if needed
+bash .claude/skills/donexttask/scripts/find-tasks.sh "$BASE_PATH"
+bash .claude/skills/donexttask/scripts/read-task-summaries.sh "$BASE_PATH"
 ```
 
 If no tasks found, report "Черга тасків порожня!" and STOP.
