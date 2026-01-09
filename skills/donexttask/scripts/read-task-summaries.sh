@@ -1,19 +1,22 @@
 #!/bin/bash
 # Read first 6 lines of each task from all locations
-# Used by doalltasks to get overview of all tasks
+# Usage: read-task-summaries.sh [base_path]
+# Default base_path: $HOME
+
+BASE="${1:-$HOME}"
 
 echo "=== GLOBAL IN_PROGRESS ==="
-for f in aitasks/in_progress/*.md 2>/dev/null; do
+for f in "${BASE}/aitasks/in_progress/"*.md 2>/dev/null; do
   [ -f "$f" ] && echo "--- $(basename $f) ---" && head -6 "$f" && echo ""
 done
 
 echo "=== GLOBAL TODO ==="
-for f in aitasks/todo/*.md 2>/dev/null; do
+for f in "${BASE}/aitasks/todo/"*.md 2>/dev/null; do
   [ -f "$f" ] && echo "--- $(basename $f) ---" && head -6 "$f" && echo ""
 done
 
 echo "=== FEATURE TASKS ==="
-for dir in aidocs/sdd/*/features/*/tasks; do
+for dir in "${BASE}/aidocs/sdd/"*/features/*/tasks; do
   [ -d "$dir" ] || continue
 
   feature=$(echo "$dir" | sed 's|.*/sdd/\([^/]*\)/features/\([^/]*\)/.*|\1/\2|')
@@ -31,10 +34,10 @@ done
 
 # Count
 echo "=== SUMMARY ==="
-GLOBAL_IP=$(find aitasks/in_progress/ -name "TASK_*.md" 2>/dev/null | wc -l)
-GLOBAL_TODO=$(find aitasks/todo/ -name "TASK_*.md" 2>/dev/null | wc -l)
-FEATURE_IP=$(find aidocs/sdd/*/features/*/tasks/in_progress/ -name "TASK_*.md" 2>/dev/null | wc -l)
-FEATURE_TODO=$(find aidocs/sdd/*/features/*/tasks/todo/ -name "TASK_*.md" 2>/dev/null | wc -l)
+GLOBAL_IP=$(find "${BASE}/aitasks/in_progress/" -name "TASK_*.md" 2>/dev/null | wc -l)
+GLOBAL_TODO=$(find "${BASE}/aitasks/todo/" -name "TASK_*.md" 2>/dev/null | wc -l)
+FEATURE_IP=$(find "${BASE}/aidocs/sdd/"*/features/*/tasks/in_progress/ -name "TASK_*.md" 2>/dev/null | wc -l)
+FEATURE_TODO=$(find "${BASE}/aidocs/sdd/"*/features/*/tasks/todo/ -name "TASK_*.md" 2>/dev/null | wc -l)
 
 echo "Global: $GLOBAL_IP in_progress, $GLOBAL_TODO todo"
 echo "Feature: $FEATURE_IP in_progress, $FEATURE_TODO todo"
