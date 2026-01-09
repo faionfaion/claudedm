@@ -56,7 +56,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 ### SDD Directory Structure
 
 ```
-$HOME/aidocs/sdd/
+aidocs/sdd/
 ├── CLAUDE.md                          # SDD overview
 ├── SDD_WORKFLOW.md                    # Детальний workflow
 ├── SPEC_TEMPLATE.md                   # Шаблон spec.md
@@ -118,7 +118,7 @@ Or:
 Before starting, verify:
 
 ```bash
-SDD_BASE="$HOME/aidocs/sdd"
+SDD_BASE="aidocs/sdd"
 
 # 1. spec.md exists with status approved
 cat ${SDD_BASE}/{project}/features/{feature}/spec.md | grep -A1 "Status"
@@ -129,7 +129,7 @@ cat ${SDD_BASE}/{project}/constitution.md
 
 **Required files:**
 1. `spec.md` exists with status `approved`
-2. Project `constitution.md` exists at `$HOME/aidocs/sdd/{project}/constitution.md`
+2. Project `constitution.md` exists at `aidocs/sdd/{project}/constitution.md`
 
 **If constitution.md doesn't exist:** Use скіл `sdd-writing-constitutions` to create it first.
 
@@ -155,7 +155,7 @@ Read project principles from constitution.md and extract:
 ### Phase 3: Research Codebase
 
 Use Grep and Glob tools to find related code:
-- Similar models in `$HOME/epass/app/applications/`
+- Similar models in `epass/app/applications/`
 - Similar services (services.py files)
 - Similar views (views.py files)
 - Existing patterns
@@ -263,7 +263,7 @@ This section helps future developers understand why certain paths were not taken
 
 File `design.md` at:
 ```
-$HOME/aidocs/sdd/{project}/features/{feature}/design.md
+aidocs/sdd/{project}/features/{feature}/design.md
 ```
 
 **Next step:** Після approve design.md → використовуй `/maketasks` для створення TASK_*.md файлів

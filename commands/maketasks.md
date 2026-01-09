@@ -39,7 +39,7 @@ Clarify with user if needed:
 
 1. Explore project structure:
 ```bash
-ls -la $HOME/epass/app/applications/
+ls -la epass/app/applications/
 ```
 
 2. Search for related code using Glob and Grep tools
@@ -48,8 +48,8 @@ ls -la $HOME/epass/app/applications/
 
 4. Check existing tasks:
 ```bash
-ls $HOME/aitasks/todo/
-ls $HOME/aitasks/in_progress/
+ls aitasks/todo/
+ls aitasks/in_progress/
 ```
 
 **Document:** Related files, existing patterns, similar implementations.
@@ -153,7 +153,7 @@ TASK CREATION REQUEST:
 ### Phase 9: Confirm Completion
 
 ```bash
-ls $HOME/aitasks/todo/ | tail -10
+ls aitasks/todo/ | tail -10
 ```
 
 Report to user:

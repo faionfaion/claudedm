@@ -33,7 +33,7 @@ SPEC (Human) → DESIGN (AI) → TASKS (AI) → CODE (AI)
 
 **Структура SDD:**
 ```
-$HOME/aidocs/sdd/{project}/
+aidocs/sdd/{project}/
 ├── constitution.md           # Принципи проекту (стандарти, патерни)
 └── features/{feature}/
     ├── spec.md               # ЩО і ЧОМУ (бізнес вимоги)
@@ -45,8 +45,8 @@ $HOME/aidocs/sdd/{project}/
 ```
 
 **Два типи тасків:**
-1. **Global tasks** — `$HOME/aitasks/` (загальні задачі проекту)
-2. **Feature tasks** — `$HOME/aidocs/sdd/{project}/features/{feature}/tasks/` (задачі для конкретної фічі)
+1. **Global tasks** — `aitasks/` (загальні задачі проекту)
+2. **Feature tasks** — `aidocs/sdd/{project}/features/{feature}/tasks/` (задачі для конкретної фічі)
 
 ---
 
@@ -85,7 +85,7 @@ If structured input is provided, parse it. If invoked directly, ask the user wha
 
 ```bash
 date "+%Y-%m-%d"
-ls $HOME/aitasks/todo/ $HOME/aitasks/in_progress/ $HOME/aitasks/done/ 2>/dev/null | grep -oE 'TASK_[0-9]+' | sort -t_ -k2 -n | tail -1
+ls aitasks/todo/ aitasks/in_progress/ aitasks/done/ 2>/dev/null | grep -oE 'TASK_[0-9]+' | sort -t_ -k2 -n | tail -1
 ```
 
 **Приклад:** Якщо останній `TASK_260`, наступний `TASK_261`.
@@ -94,7 +94,7 @@ ls $HOME/aitasks/todo/ $HOME/aitasks/in_progress/ $HOME/aitasks/done/ 2>/dev/nul
 
 ```bash
 date "+%Y-%m-%d"
-FEATURE_PATH="$HOME/aidocs/sdd/{project}/features/{feature}/tasks"
+FEATURE_PATH="aidocs/sdd/{project}/features/{feature}/tasks"
 ls ${FEATURE_PATH}/todo/ ${FEATURE_PATH}/in_progress/ ${FEATURE_PATH}/done/ 2>/dev/null | grep -oE 'TASK_[0-9]+' | sort -t_ -k2 -n | tail -1
 ```
 
@@ -141,7 +141,7 @@ Create a complete, well-structured task file:
 
 - **Task Number:** TASK_{NUMBER}
 - **File Name:** {TASK_FILENAME}
-- **File Path:** $HOME/aitasks/todo/{TASK_FILENAME}
+- **File Path:** aitasks/todo/{TASK_FILENAME}
 - **Created Date:** {DATE}
 
 ### Input from Orchestrator
@@ -157,7 +157,7 @@ Create a complete, well-structured task file:
 ## Project Context
 
 - **Project:** E-Pass electronic transport payment system
-- **Working directory:** $HOME/epass
+- **Working directory:** epass
 - **Tech stack:** Django 4.2+, Python 3.11+, PostgreSQL, pytest
 
 ---
@@ -168,17 +168,17 @@ If this is a **feature task** (not global), read SDD documents:
 
 1. **Constitution** (project standards):
    ```
-   $HOME/aidocs/sdd/{project}/constitution.md
+   aidocs/sdd/{project}/constitution.md
    ```
 
 2. **Spec** (requirements):
    ```
-   $HOME/aidocs/sdd/{project}/features/{feature}/spec.md
+   aidocs/sdd/{project}/features/{feature}/spec.md
    ```
 
 3. **Design** (technical approach):
    ```
-   $HOME/aidocs/sdd/{project}/features/{feature}/design.md
+   aidocs/sdd/{project}/features/{feature}/design.md
    ```
 
 **Use this context to:**
@@ -228,7 +228,7 @@ Use Bash tool to verify the file was created and check first 6 lines.
 <!-- SUMMARY: One sentence describing what and why -->
 ## Complexity: simple/normal/complex
 ## Created: YYYY-MM-DD
-## Project: $HOME/epass
+## Project: epass
 
 ## Description
 Clear explanation of what needs to be done.
@@ -284,7 +284,7 @@ Return structured result:
 
 STATUS: SUCCESS | FAILED
 TASK_FILE: TASK_XXX_name.md
-PATH: $HOME/aitasks/todo/TASK_XXX_name.md
+PATH: aitasks/todo/TASK_XXX_name.md
 
 RESEARCH_FINDINGS:
 - Related files: N files discovered
@@ -326,7 +326,7 @@ Report to user:
 - Complexity: {complexity}
 - Related files: N found
 - Key criteria: criterion 1, criterion 2
-- Path: $HOME/aitasks/todo/TASK_XXX_name.md
+- Path: aitasks/todo/TASK_XXX_name.md
 
 ### FAILED:
 

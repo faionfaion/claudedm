@@ -2,7 +2,7 @@
 <!-- SUMMARY: Створити сервіси для генерації Timeline подій та інтегрувати в trigger points -->
 ## Complexity: normal
 ## Created: 2025-11-28
-## Project: $HOME/epass
+## Project: epass
 
 ## Description
 Створити сервіси для генерації Timeline подій та інтегрувати їх у всі точки в коді де відбуваються відповідні події.

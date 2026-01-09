@@ -137,7 +137,7 @@ Pattern is PREFIX match. Without `:*` requires exact match.
 ## Command Locations
 
 - Project: `.claude/commands/name.md` (shows as "project")
-- Personal: `$HOME/.claude/commands/name.md` (shows as "user")
+- Personal: `.claude/commands/name.md` (shows as "user")
 - Namespaced: `.claude/commands/group/name.md` (shows as "project:group")
 
 Project overrides personal with same name.

@@ -54,7 +54,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
 ### SDD Directory Structure
 
 ```
-$HOME/aidocs/sdd/
+aidocs/sdd/
 ├── CLAUDE.md                          # SDD overview
 ├── SDD_WORKFLOW.md                    # Детальний workflow
 ├── SPEC_TEMPLATE.md                   # Шаблон spec.md
@@ -128,9 +128,9 @@ Investigate existing code to identify:
 - Similar feature implementations
 
 Key locations:
-- Models: `$HOME/epass/app/applications/`
+- Models: `epass/app/applications/`
 - Services: `services.py` files in application directories
-- Project conventions: `$HOME/epass/app/CLAUDE.md`
+- Project conventions: `epass/app/CLAUDE.md`
 
 ### Phase 3: Clarify Details
 
@@ -164,7 +164,7 @@ Create directory structure and save:
 
 ```bash
 # Базовий шлях
-SDD_BASE="$HOME/aidocs/sdd"
+SDD_BASE="aidocs/sdd"
 
 # Створити директорії
 mkdir -p ${SDD_BASE}/{project}/features/{feature_name}/tasks/{todo,in_progress,done}
@@ -173,7 +173,7 @@ mkdir -p ${SDD_BASE}/{project}/features/{feature_name}/tasks/{todo,in_progress,d
 # ${SDD_BASE}/{project}/features/{feature_name}/spec.md
 ```
 
-**Повний шлях:** `$HOME/aidocs/sdd/{project}/features/{feature_name}/spec.md`
+**Повний шлях:** `aidocs/sdd/{project}/features/{feature_name}/spec.md`
 
 ---
 
@@ -181,7 +181,7 @@ mkdir -p ${SDD_BASE}/{project}/features/{feature_name}/tasks/{todo,in_progress,d
 
 File `spec.md` at:
 ```
-$HOME/aidocs/sdd/{project}/features/{feature_name}/spec.md
+aidocs/sdd/{project}/features/{feature_name}/spec.md
 ```
 
 **Next step:** Після approve spec.md → використовуй скіл `sdd-writing-design-docs` для створення design.md

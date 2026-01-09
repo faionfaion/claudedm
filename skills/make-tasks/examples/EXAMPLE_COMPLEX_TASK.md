@@ -2,7 +2,7 @@
 <!-- SUMMARY: Створити webhook endpoints для прийому оновлень від CRM: нові повідомлення, зміна статусу, призначення -->
 ## Complexity: complex
 ## Created: 2025-12-04
-## Project: $HOME/epass/app/applications/endpoints/v0/crm
+## Project: epass/app/applications/endpoints/v0/crm
 
 ## Description
 Реалізувати систему webhook endpoints для прийому оновлень від зовнішньої CRM системи.
