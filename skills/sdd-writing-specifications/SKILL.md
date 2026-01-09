@@ -166,5 +166,4 @@ Common mistakes to avoid:
 
 ## Sources
 
-- Template reference: `/aidocs/sdd/SPEC_TEMPLATE.md`
-- Project conventions: `/home/moskalyuk_ruslan/epass/app/CLAUDE.md`
+- Template: `templates/SPEC_TEMPLATE.md` (in this skill directory)

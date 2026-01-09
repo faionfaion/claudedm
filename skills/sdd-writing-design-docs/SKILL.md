@@ -185,5 +185,4 @@ File `design.md` in feature directory: `{feature_path}/design.md`
 
 - Project spec.md
 - Project constitution.md
-- Template: `/aidocs/sdd/DESIGN_TEMPLATE.md`
-- Codebase analysis results
+- Template: `templates/DESIGN_TEMPLATE.md` (in this skill directory)

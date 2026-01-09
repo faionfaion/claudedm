@@ -194,5 +194,4 @@ Common issues when creating constitutions:
 
 ## Sources
 
-- Template: `/aidocs/sdd/CONSTITUTION_TEMPLATE.md`
-- Claude Code Skills Documentation: https://docs.anthropic.com/en/docs/claude-code
+- Template: `templates/CONSTITUTION_TEMPLATE.md` (in this skill directory)
