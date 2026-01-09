@@ -39,7 +39,7 @@ Or:
 
 Before starting, verify:
 1. `spec.md` exists with status `approved`
-2. Project `constitution.md` exists at `/aidocs/sdd/projects/{project}/constitution.md`
+2. Project `constitution.md` exists at `/aidocs/sdd/{project}/constitution.md`
 
 ## Workflow
 

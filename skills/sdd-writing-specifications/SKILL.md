@@ -86,8 +86,8 @@ Present draft to user:
 
 Create directory structure and save:
 ```
-/aidocs/sdd/projects/{project}/features/{feature_name}/spec.md
-/aidocs/sdd/projects/{project}/features/{feature_name}/tasks/{todo,in_progress,done}/
+/aidocs/sdd/{project}/features/{feature_name}/spec.md
+/aidocs/sdd/{project}/features/{feature_name}/tasks/{todo,in_progress,done}/
 ```
 
 ---
@@ -96,7 +96,7 @@ Create directory structure and save:
 
 File `spec.md` at:
 ```
-/aidocs/sdd/projects/{project}/features/{feature_name}/spec.md
+/aidocs/sdd/{project}/features/{feature_name}/spec.md
 ```
 
 ---

@@ -114,7 +114,7 @@ The assistant presents the draft:
 
 The assistant saves the file to:
 ```
-/aidocs/sdd/projects/{project_name}/constitution.md
+/aidocs/sdd/{project_name}/constitution.md
 ```
 
 ---
@@ -138,7 +138,7 @@ The assistant saves the file to:
 
 File `constitution.md` in project directory:
 ```
-/aidocs/sdd/projects/{project_name}/constitution.md
+/aidocs/sdd/{project_name}/constitution.md
 ```
 
 ---
