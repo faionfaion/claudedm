@@ -9,3 +9,6 @@
 
 # Track gitignore itself
 !.gitignore
+
+# Track CLAUDE.md
+!CLAUDE.md
