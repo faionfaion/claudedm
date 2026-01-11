@@ -1,14 +1,17 @@
 # Ignore everything by default
 *
 
-# But track skills and commands
+# But track skills, commands, and agents
 !skills/
 !skills/**
 !commands/
 !commands/**
+!agents/
+!agents/**
 
-# Track gitignore itself
+# Track gitignore and gitkeep
 !.gitignore
+!.gitkeep
 
 # Track CLAUDE.md
 !CLAUDE.md
