@@ -57,7 +57,31 @@ If user selects new project → go to PHASE 3
 Use AskUserQuestion:
 - "Назва нового проекту?" (free text input via "Other")
 
-### 3.2 Create Constitution
+### 3.2 Detect Project Type
+
+Use AskUserQuestion:
+
+**Question:** "Чи існує вже codebase для цього проекту?"
+
+**Options:**
+- "Так, є існуючий код" → MODE 1: Analysis
+- "Ні, це новий проект з нуля" → MODE 2: Brainstorming
+
+### 3.3a MODE 1: Existing Codebase
+
+Ask user for path to codebase, then call Skill tool:
+```
+skill: "sdd-writing-constitutions"
+args: "{project_name} {codebase_path}"
+```
+
+The skill will:
+- Analyze project structure
+- Identify tech stack, patterns, standards
+- Draft constitution based on findings
+- Review with user
+
+### 3.3b MODE 2: New Project (Brainstorming)
 
 Call Skill tool:
 ```
@@ -65,10 +89,27 @@ skill: "sdd-writing-constitutions"
 args: "{project_name}"
 ```
 
-The skill will:
-- Analyze codebase (ask user for path)
-- Interview user about standards
-- Create constitution.md
+The skill will use Socratic dialogue to explore:
+
+**Vision (Five Whys):**
+- Яку проблему вирішуємо?
+- Хто цільова аудиторія?
+- Чому саме цей підхід?
+
+**Tech Choices (Alternatives):**
+- Backend: Django vs FastAPI vs NestJS
+- Database: PostgreSQL vs MongoDB vs SQLite
+- Frontend: React vs Vue vs vanilla
+
+**Architecture (Trade-offs):**
+- Monolith vs Microservices
+- REST vs GraphQL
+- ORM vs Raw SQL
+
+**Standards:**
+- Linter, formatter, types
+- Testing requirements
+- Git workflow
 
 After constitution created → go to PHASE 4 with new project selected
 
@@ -106,7 +147,7 @@ If user selects new feature → go to PHASE 5
 Use AskUserQuestion:
 - "Назва нової фічі? (kebab-case, наприклад: crm-webhooks)"
 
-### 5.2 Create Specification
+### 5.2 Create Specification (Socratic Dialogue)
 
 Call Skill tool:
 ```
@@ -114,10 +155,30 @@ skill: "sdd-writing-specifications"
 args: "{project} {feature_name}"
 ```
 
-The skill will:
-- Interview user about requirements
-- Research codebase
-- Create spec.md
+The skill uses Socratic dialogue:
+
+**Brainstorming Phase:**
+- "Яку проблему вирішуємо?" + Five Whys
+- "Хто страждає і як?"
+- Explore alternatives for each solution
+- Challenge assumptions
+
+**Research Phase:**
+- Find related code in codebase
+- Identify reusable patterns
+- Check existing similar features
+
+**Clarification Phase:**
+- User Stories workshop (roles, goals)
+- Edge cases through questions
+- Trade-offs for priorities
+
+**Draft Phase:**
+- Section-by-section with validation
+- Problem Statement → validate
+- User Stories → validate
+- Requirements → validate
+- Out of Scope → validate
 
 **Wait for user approval of spec.md before continuing!**
 
@@ -236,21 +297,65 @@ aidocs/sdd/
 
 ---
 
-## Example Flow
+## Example Flows
+
+### Example 1: New Project (Brainstorming)
 
 ```
 User: /sdd
 
 Claude: З яким проектом працюємо?
 [ ] epass
-[ ] billing
+[ ] + Новий проект
+
+User: + Новий проект
+
+Claude: Назва нового проекту?
+User: marketplace
+
+Claude: Чи існує вже codebase для цього проекту?
+[ ] Так, є існуючий код
+[ ] Ні, це новий проект з нуля
+
+User: Ні, це новий проект з нуля
+
+Claude: [Socratic dialogue for constitution]
+        "Розкажи про проект. Яку проблему він вирішує?"
+
+User: B2B маркетплейс для оптових закупівель
+
+Claude: "Чому потрібен новий маркетплейс? Існуючі не підходять?"
+
+User: Немає локального рішення з інтеграцією з 1С
+
+Claude: [Explores tech alternatives with trade-offs]
+        "Backend Framework:
+         A: Django - batteries included, ORM, admin
+         B: FastAPI - швидкий, async, modern
+         Який підхід ближче?"
+
+User: Django
+
+Claude: [Continues brainstorming...]
+        [Creates constitution.md with standards]
+
+Claude: Constitution готова. Яка перша фіча?
+```
+
+### Example 2: Existing Project + New Feature
+
+```
+User: /sdd
+
+Claude: З яким проектом працюємо?
+[ ] epass
+[ ] marketplace
 [ ] + Новий проект
 
 User: epass
 
 Claude: Яка фіча?
 [ ] crm-integration
-[ ] notifications
 [ ] + Нова фіча
 
 User: + Нова фіча
@@ -258,24 +363,37 @@ User: + Нова фіча
 Claude: Назва нової фічі?
 User: payment-refunds
 
-Claude: [Calls sdd-writing-specifications skill]
-        [Creates spec.md through interview]
+Claude: [Socratic dialogue for spec]
+        "Яку проблему вирішуємо? Хто страждає?"
 
-Claude: Специфікацію створено. Переглянь та підтверди.
-User: Ок, все добре
+User: Клієнти не можуть отримати рефанд
 
-Claude: [Calls sdd-writing-design-docs skill]
-        [Creates design.md]
+Claude: "Чому не можуть? Що заважає?"
+        [Five Whys continues...]
 
-Claude: Дизайн створено. Переглянь та підтверди.
-User: Додай ще один endpoint для часткового рефанду
+Claude: "Варіанти рішення:
+         A: Повний рефанд одразу
+         B: Частковий рефанд
+         C: Рефанд через запит
+         Що потрібно?"
 
-Claude: [Updates design.md]
+User: B + C
 
-User: Тепер ок
+Claude: [Draft spec section by section]
+        "Problem Statement:
+         Клієнти не можуть...
+         Це правильно?"
 
-Claude: [Calls make-tasks skill]
-        [Creates 5 tasks]
+User: Так
+
+Claude: [Continues with User Stories, Requirements...]
+        [Creates spec.md]
+
+Claude: Специфікацію затверджено?
+User: Так
+
+Claude: [Creates design.md through analysis]
+Claude: [Creates tasks]
 
 Claude: Готово!
         - spec.md: aidocs/sdd/epass/features/payment-refunds/spec.md

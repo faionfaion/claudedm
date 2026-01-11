@@ -1,8 +1,8 @@
 ---
 name: sdd-writing-constitutions
 user-invocable: false
-description: "SDD Framework: Creates, edits, or updates constitution.md with project principles and standards. Use when user asks to create constitution, edit constitution, update project standards. Triggers on \"constitution.md\", \"constitution\", \"конституція проекту\", \"стандарти проекту\"."
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(cat:*), Bash(git log:*)
+description: "SDD Framework: Creates constitution.md through codebase analysis OR Socratic dialogue for new projects. Triggers on \"constitution.md\", \"constitution\", \"конституція проекту\", \"стандарти проекту\"."
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(cat:*), Bash(git log:*), AskUserQuestion
 ---
 
 # SDD: Writing Constitutions
@@ -11,277 +11,327 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(cat:*), Bash(git 
 
 ---
 
-## SDD Framework Overview
+## Філософія
 
-Цей скіл є частиною **Spec-Driven Development (SDD)** фреймворку.
+**Constitution.md** — незмінні принципи проекту для ВСІХ фіч.
 
-### Філософія SDD
-
-**"Intent is the source of truth"** — специфікація є головним артефактом, код — лише її реалізація.
-
-### SDD Workflow
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  PHASE 0: CONSTITUTION (One-time per project) ← ВИ ТУТ         │
-│                                                                 │
-│  1. Проаналізувати codebase                                     │
-│  2. Створити constitution.md (цей скіл)                        │
-│  3. Review & approve                                            │
-│                                                                 │
-│  Output: constitution.md (project standards)                    │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  PHASE 1: SPECIFICATION (per feature)                           │
-│  → Скіл: sdd-writing-specifications                            │
-│  Output: spec.md                                                │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  PHASE 2: DESIGN (per feature)                                  │
-│  → Скіл: sdd-writing-design-docs                               │
-│  Output: design.md                                              │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  PHASE 3-4: TASKS + EXECUTION                                   │
-│  → /maketasks, /donexttask, /doalltasks                        │
-│  Output: Code + Tests + Commits                                │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### SDD Directory Structure
-
-```
-aidocs/sdd/
-├── CLAUDE.md                          # SDD overview
-├── SDD_WORKFLOW.md                    # Детальний workflow
-├── SPEC_TEMPLATE.md                   # Шаблон spec.md
-├── DESIGN_TEMPLATE.md                 # Шаблон design.md
-├── CONSTITUTION_TEMPLATE.md           # Шаблон constitution.md ← використовуй!
-├── TASK_EXECUTION.md                  # Процес виконання тасків
-└── {project}/                         # epass, billing, etc.
-    ├── constitution.md                # Принципи проекту ← створюємо тут
-    └── features/
-        └── {feature-name}/
-            ├── spec.md
-            ├── design.md
-            └── tasks/
-```
-
-### Роль Constitution
-
-**Constitution.md — незмінні принципи проекту, які діють для ВСІХ фіч.**
-
-Він визначає:
-- Technology stack
-- Code standards (linters, formatters, naming)
-- Architecture patterns
-- Testing requirements
-- Git workflow
-- API standards
-
-**Кожен design.md та task ПОВИНЕН відповідати constitution!**
+**Два режими:**
+1. **Existing Project** → аналіз codebase
+2. **New Project** → Сократівський діалог + brainstorming
 
 ---
 
-## When to Use This Skill
+## Workflow Overview
 
-**ALWAYS use this skill when user asks to:**
-- Create constitution.md for a project
-- Edit/update/change/modify project constitution
-- Define project standards and principles
-- Analyze codebase for conventions
-
-**Trigger phrases:** "create constitution", "edit constitution", "update constitution.md", "project standards", "створити конституцію", "оновити конституцію", "стандарти проекту"
-
----
-
-## Purpose
-
-This skill creates constitution.md for a project by:
-1. Deep analysis of existing codebase
-2. Identifying patterns and conventions
-3. Documenting standards and principles
-
----
-
-## Input
-
-- `project_name` - project name
-- `project_path` - path to codebase
-
----
-
-## Workflow
-
-### Phase 1: Analyze Project Structure
-
-The assistant examines the project structure:
-- General directory layout (2 levels deep)
-- CLAUDE.md and README.md files
-- Configuration files (py, toml, yaml)
-
-### Phase 2: Identify Technology Stack
-
-The assistant determines technologies:
-- Python version from pyproject.toml or setup.py
-- Framework version from requirements or pyproject.toml
-- Database configuration from settings
-- Key dependencies from requirements files
-
-### Phase 3: Analyze Code Standards
-
-The assistant identifies code style:
-- Linter configurations (pyproject.toml, .flake8, setup.cfg)
-- Makefile commands for quality checks
-- Naming conventions from models.py and services.py files
-
-### Phase 4: Identify Architecture Patterns
-
-The assistant investigates architecture:
-- Application structure and organization
-- Typical files in each app
-- Layer patterns (views, services, repositories, models)
-- Domain-driven design indicators
-
-### Phase 5: Analyze Testing Practices
-
-The assistant examines tests:
-- Test directory structure
-- Test file patterns and styles
-- Coverage configuration
-
-### Phase 6: Identify Git Workflow
-
-The assistant investigates git practices:
-- Recent commit message style
-- Branch naming conventions
-- CI/CD configuration files
-
-### Phase 7: Draft Constitution
-
-The assistant creates constitution.md using the template from `/aidocs/sdd/CONSTITUTION_TEMPLATE.md`
-
-**Required sections:**
-- Overview
-- Technology Stack
-
-**Recommended sections (if identified):**
-- Code Standards
-- Architecture Patterns
-- Testing Requirements
-
-**Optional sections (if relevant):**
-- API Standards
-- Database Guidelines
-- Security
-- Git Workflow
-- Logging and Monitoring
-- Performance
-
-### Phase 8: Review with User
-
-The assistant presents the draft:
-1. Asks if everything is correct
-2. Clarifies disputed points
-3. Adds project-specific details
-
-### Phase 9: Save Constitution
-
-The assistant saves the file to:
 ```
-aidocs/sdd/{project_name}/constitution.md
+┌─ Existing codebase? ─┐
+│                      │
+▼ YES                  ▼ NO
+ANALYZE                BRAINSTORM
+├─ Structure           ├─ Vision
+├─ Tech Stack          ├─ Tech choices
+├─ Patterns            ├─ Architecture
+├─ Standards           ├─ Standards
+└─ Draft               └─ Draft
+        │                    │
+        └──────┬─────────────┘
+               ▼
+          REVIEW & SAVE
 ```
 
-Create directory if needed:
+---
+
+## MODE 1: Existing Project (Аналіз)
+
+### Phase 1: Detect Project
+
+```bash
+# Check if codebase exists
+ls {project_path}/
+```
+
+Якщо є код → MODE 1 (аналіз)
+Якщо немає → MODE 2 (brainstorm)
+
+### Phase 2: Analyze Structure
+
+- Directory layout (2 levels)
+- CLAUDE.md, README.md
+- Config files (pyproject.toml, package.json, etc.)
+
+### Phase 3: Identify Tech Stack
+
+- Language version
+- Framework version
+- Database
+- Key dependencies
+
+### Phase 4: Analyze Patterns
+
+- Architecture (layers, DDD, etc.)
+- Naming conventions
+- Linters, formatters
+- Testing practices
+
+### Phase 5: Draft from Analysis
+
+Покажи знахідки та склади constitution:
+```markdown
+**Аналіз {project}:**
+
+1. Tech Stack: Python 3.11, Django 4.2, PostgreSQL
+2. Architecture: Layered (views → services → models)
+3. Standards: black + isort + flake8
+4. Testing: pytest, 80%+ coverage
+
+Це відповідає реальності? Що додати/змінити?
+```
+
+---
+
+## MODE 2: New Project (Brainstorming)
+
+### Phase 1: Vision (Сократівський діалог)
+
+Почни з відкритого питання:
+> "Розкажи про проект, який плануєш. Яку проблему він вирішує?"
+
+**Five Whys:**
+```
+User: "Це буде CRM система"
+→ Чому потрібна нова CRM?
+User: "Існуючі не підходять"
+→ Чому не підходять?
+User: "Немає інтеграції з X"
+→ Що конкретно потрібно від інтеграції?
+```
+
+### Phase 2: Tech Choices (Alternatives)
+
+Для кожного рішення — альтернативи:
+
+```markdown
+**Backend Framework:**
+
+A: **Django** (Python)
+   ✅ Batteries included, ORM, admin
+   ❌ Monolithic, може бути повільним
+
+B: **FastAPI** (Python)
+   ✅ Швидкий, async, modern
+   ❌ Менше готових рішень
+
+C: **NestJS** (TypeScript)
+   ✅ Enterprise patterns, TypeScript
+   ❌ Складніший setup
+
+Який підхід ближче?
+```
+
+```markdown
+**Database:**
+
+A: **PostgreSQL**
+   ✅ Надійний, JSON support, розширення
+   ❌ Складніший ніж SQLite
+
+B: **MongoDB**
+   ✅ Гнучка схема, швидкий старт
+   ❌ Складні транзакції
+
+C: **SQLite**
+   ✅ Zero config, embedded
+   ❌ Не для production з навантаженням
+
+Який вибір?
+```
+
+### Phase 3: Architecture (Trade-offs)
+
+```markdown
+**Trade-off #1:** Monolith vs Microservices
+- A: Monolith — простіше, швидший старт
+- B: Microservices — масштабованість, складніше
+
+**Trade-off #2:** REST vs GraphQL
+- A: REST — простіше, стандарт
+- B: GraphQL — гнучкість, один endpoint
+
+**Trade-off #3:** ORM vs Raw SQL
+- A: ORM — швидша розробка
+- B: Raw SQL — повний контроль
+
+Що обираєш?
+```
+
+### Phase 4: Standards (Питання)
+
+```markdown
+**Code Style:**
+- Який linter? (eslint, flake8, none)
+- Який formatter? (prettier, black, none)
+- Type hints обов'язкові?
+
+**Testing:**
+- Який рівень coverage потрібен?
+- Unit tests обов'язкові?
+- E2E tests?
+
+**Git:**
+- Conventional commits?
+- Branch naming?
+- PR reviews обов'язкові?
+```
+
+### Phase 5: Validate Vision
+
+```markdown
+**Моє розуміння проекту:**
+
+1. **Мета:** {what problem it solves}
+2. **Tech Stack:** {chosen technologies}
+3. **Architecture:** {chosen patterns}
+4. **Standards:** {coding standards}
+
+Це правильно? Що пропустив?
+```
+
+---
+
+## Draft Constitution (обидва режими)
+
+### Секція за секцією з валідацією
+
+**Overview:**
+```markdown
+## Overview
+
+**Тип:** {project type}
+**Мета:** {purpose}
+**Власник:** {owner}
+
+---
+Правильно?
+```
+
+**Technology Stack:**
+```markdown
+## Technology Stack
+
+| Технологія | Версія | Призначення |
+|------------|--------|-------------|
+| {lang} | {ver} | Core |
+| {framework} | {ver} | Backend |
+| {db} | {ver} | Database |
+
+---
+Все вказано?
+```
+
+**Architecture:**
+```markdown
+## Architecture Patterns
+
+- **Pattern:** {layered/DDD/microservices}
+- **Structure:** {description}
+
+---
+Відповідає баченню?
+```
+
+**Standards:**
+```markdown
+## Code Standards
+
+- **Linter:** {tool}
+- **Formatter:** {tool}
+- **Types:** {required/optional}
+- **Testing:** {requirements}
+
+---
+Згоден?
+```
+
+---
+
+## Final Review
+
+```markdown
+**Checklist:**
+- [ ] Overview зрозумілий
+- [ ] Tech Stack повний
+- [ ] Architecture визначена
+- [ ] Standards конкретні
+- [ ] Testing requirements є
+
+Готовий до затвердження?
+```
+
+---
+
+## Save
+
 ```bash
 mkdir -p aidocs/sdd/{project_name}
+# Write constitution.md
 ```
 
 ---
 
-## Analysis Checklist
+## Сократівські питання (шпаргалка)
 
-```
-[ ] Project structure understood?
-[ ] Technology stack identified?
-[ ] Code style detected (linters, formatters)?
-[ ] Naming conventions documented?
-[ ] Architecture patterns described?
-[ ] Testing practices clear?
-[ ] Git workflow determined?
-[ ] CI/CD process documented?
-```
+**Для нового проекту:**
+- Яку проблему вирішуємо?
+- Хто буде користуватись?
+- Які обмеження (бюджет, час, команда)?
+- Чому саме ця технологія?
+- Що буде через рік?
+
+**Для existing проекту:**
+- Чому обрали цей паттерн?
+- Що працює добре?
+- Що хотіли б змінити?
+- Які болючі точки?
+
+---
+
+## Anti-patterns
+
+❌ **Копіювання без розуміння**
+- Погано: "Візьмемо як в іншому проекті"
+- Добре: "Чому цей підхід підходить саме нам?"
+
+❌ **Over-engineering на старті**
+- Погано: "Microservices з перших днів"
+- Добре: "Почнемо з monolith, розділимо коли потрібно"
+
+❌ **Ігнорування команди**
+- Погано: "Візьмемо Rust" (ніхто не знає)
+- Добре: "Яка експертиза в команді?"
 
 ---
 
 ## Output
 
-File `constitution.md` at:
 ```
 aidocs/sdd/{project_name}/constitution.md
 ```
 
-**Next step:** Після approve constitution.md → створюй фічі:
-1. Створи директорію фічі: `mkdir -p aidocs/sdd/{project}/features/{feature}/tasks/{todo,in_progress,done}`
-2. Використай скіл `sdd-writing-specifications` для створення spec.md
+**Next:** → `sdd-writing-specifications` для першої фічі
 
 ---
 
-## Example Analysis Output
+## Self-Updating
 
-```
-Analysis of E-Pass project:
+Repository: `~/.claude/claudedm/` (faionfaion/claudedm)
 
-1. Structure:
-   - Django project in app/
-   - Applications in app/applications/
-   - Config in config/
-
-2. Tech Stack:
-   - Python 3.11+
-   - Django 4.2+
-   - PostgreSQL
-   - Redis, RabbitMQ
-
-3. Code Standards:
-   - black + isort + flake8
-   - Type hints
-   - Docstrings
-
-4. Architecture:
-   - Layered: views -> services -> models
-   - Each app: models, views, services, serializers
-
-5. Testing:
-   - pytest
-   - Factory Boy
-   - 80%+ coverage
-
-6. Git:
-   - Conventional commits
-   - Feature branches
-   - GitLab CI/CD
+```bash
+cp -r ~/.claude/claudedm/skills/sdd-writing-constitutions ~/.claude/skills/
 ```
 
 ---
 
-## Failed Attempts
+## Documentation
 
-Common issues when creating constitutions:
-
-- **Incomplete analysis**: Skipping phases leads to missing important patterns. Always complete all phases.
-- **Assumptions without evidence**: Do not assume patterns exist without finding concrete examples in the codebase.
-- **Over-documenting**: Constitution should capture what IS, not what SHOULD BE. Avoid prescriptive rules not supported by existing code.
-- **Missing user review**: Always show draft to user before finalizing. Project-specific knowledge is essential.
-
----
-
-## Sources
-
-- Template: `templates/CONSTITUTION_TEMPLATE.md` (in this skill directory)
+- [Skills](https://code.claude.com/docs/en/skills)
+- [Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview)
