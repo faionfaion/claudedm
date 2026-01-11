@@ -230,8 +230,29 @@ SKILL.md → advanced.md → details.md (bad - may be partially read)
 
 ---
 
-## Sources
+## Self-Updating
 
+This skill can update itself. To update:
+1. Edit `~/.claude/claudedm/skills/make-skills/SKILL.md`
+2. Sync: `cp -r ~/.claude/claudedm/skills/make-skills ~/.claude/skills/`
+3. Changes apply immediately (hot-reload in Jan 2026+)
+
+Repository: `~/.claude/claudedm/` (faionfaion/claudedm on GitHub)
+
+---
+
+## Documentation
+
+**Official:**
 - [Claude Code Skills](https://code.claude.com/docs/en/skills)
 - [Skill Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
 - [Anthropic Skills Repo](https://github.com/anthropics/skills)
+
+**Related:**
+- [Slash Commands](https://code.claude.com/docs/en/slash-commands)
+- [Subagents](https://code.claude.com/docs/en/sub-agents)
+- [Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview)
+
+**Community:**
+- [Skills vs Commands vs Subagents](https://www.youngleaders.tech/p/claude-skills-commands-subagents-plugins)
+- [Equipping Agents with Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
