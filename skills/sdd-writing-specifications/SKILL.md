@@ -1,7 +1,7 @@
 ---
 name: sdd-writing-specifications
 user-invocable: false
-description: "SDD Framework: Creates, edits, or updates spec.md with requirements and user stories. Use when user asks to create spec, edit specification, update spec.md, write requirements. Triggers on \"spec.md\", \"specification\", \"специфікація\", \"вимоги\"."
+description: "SDD Framework: Creates spec.md through Socratic dialogue and brainstorming. Iterative refinement of ideas through questions and alternatives. Triggers on \"spec.md\", \"specification\", \"специфікація\", \"вимоги\"."
 allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 
@@ -11,247 +11,341 @@ allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
 
 ---
 
-## SDD Framework Overview
+## Філософія
 
-Цей скіл є частиною **Spec-Driven Development (SDD)** фреймворку.
+**"Intent is the source of truth"** — специфікація є головним артефактом.
 
-### Філософія SDD
+**Сократівський діалог** — через правильні питання користувач сам формулює вимоги.
 
-**"Intent is the source of truth"** — специфікація є головним артефактом, код — лише її реалізація.
-
-### SDD Workflow
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  PHASE 1: SPECIFICATION (Human + AI) ← ВИ ТУТ                   │
-│                                                                 │
-│  1. Створити feature directory                                  │
-│  2. Написати spec.md (цей скіл)                                │
-│  3. Review & approve                                            │
-│                                                                 │
-│  Output: spec.md (status: approved)                            │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  PHASE 2: DESIGN (AI-assisted)                                  │
-│  → Скіл: sdd-writing-design-docs                               │
-│  Output: design.md                                              │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  PHASE 3: TASK CREATION (AI) → /maketasks                      │
-│  Output: tasks/todo/TASK_*.md                                  │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  PHASE 4: EXECUTION (AI) → /donexttask, /doalltasks            │
-│  Output: Code + Tests + Commits                                │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### SDD Directory Structure
-
-```
-aidocs/sdd/
-├── CLAUDE.md                          # SDD overview
-├── SDD_WORKFLOW.md                    # Детальний workflow
-├── SPEC_TEMPLATE.md                   # Шаблон spec.md
-├── DESIGN_TEMPLATE.md                 # Шаблон design.md
-├── CONSTITUTION_TEMPLATE.md           # Шаблон constitution.md
-├── TASK_EXECUTION.md                  # Процес виконання тасків
-└── {project}/                         # epass, billing, etc.
-    ├── constitution.md                # Принципи проекту
-    └── features/
-        └── {feature-name}/            # kebab-case
-            ├── spec.md                # ЩО і ЧОМУ ← створюємо тут
-            ├── design.md              # ЯК (архітектура)
-            └── tasks/                 # Задачі
-                ├── todo/
-                ├── in_progress/
-                └── done/
-```
-
-### Key SDD Documents
-
-| Document | Призначення | Створюється |
-|----------|------------|-------------|
-| `constitution.md` | Принципи проекту, стандарти | Один раз на проект |
-| `spec.md` | ЩО і ЧОМУ (бізнес вимоги) | Для кожної фічі (цей скіл) |
-| `design.md` | ЯК (технічна реалізація) | Після approve spec.md |
-| `TASK_*.md` | Атомарні задачі | Після approve design.md |
+**Brainstorming** — ітеративне уточнення ідей через альтернативи та trade-offs.
 
 ---
 
-## When to Use This Skill
+## Workflow Overview
 
-**ALWAYS use this skill when user asks to:**
-- Create spec.md for a feature
-- Edit/update/change/modify existing specification
-- Write requirements document
-- Conduct requirements interview
-
-**Trigger phrases:** "create spec", "edit specification", "update spec.md", "write requirements", "створити специфікацію", "оновити spec.md", "написати вимоги"
-
----
-
-## Purpose
-
-Creates comprehensive spec.md for features through stakeholder interviews, codebase research, and structured specification generation.
+```
+PHASE 1: Brainstorm → уточнення ідеї через питання
+PHASE 2: Research  → аналіз існуючого коду
+PHASE 3: Clarify   → технічні деталі через діалог
+PHASE 4: Draft     → секція за секцією з валідацією
+PHASE 5: Review    → фінальне затвердження
+```
 
 ---
 
-## Input
+## PHASE 1: Brainstorming (Сократівський діалог)
 
-- `feature_name` - feature name (kebab-case)
-- `project` - project name (default: epass)
-- Or free-form feature description from user
+**Мета:** Витягти справжні вимоги через правильні питання.
+
+### 1.1 Початкове розуміння
+
+Почни з відкритого питання:
+> "Розкажи про проблему, яку хочеш вирішити. Хто страждає і як?"
+
+**НЕ переходь до рішень** — спочатку зрозумій проблему.
+
+### 1.2 Five Whys (5 Чому)
+
+Для кожної відповіді питай "Чому?":
+```
+User: "Потрібен експорт звітів"
+→ Чому потрібен експорт?
+User: "Бо менеджери просять дані"
+→ Чому вони просять дані?
+User: "Для звітності керівництву"
+→ Чому не можуть дивитись в системі?
+User: "Не мають доступу / незручно"
+→ Ага, справжня проблема: доступ або UX
+```
+
+### 1.3 Explore Alternatives
+
+Для кожної ідеї запропонуй альтернативи:
+
+```markdown
+**Варіант A:** {підхід 1}
+- ✅ Переваги: ...
+- ❌ Недоліки: ...
+
+**Варіант B:** {підхід 2}
+- ✅ Переваги: ...
+- ❌ Недоліки: ...
+
+**Варіант C:** {підхід 3}
+- ✅ Переваги: ...
+- ❌ Недоліки: ...
+
+Який варіант ближче до твого бачення?
+```
+
+### 1.4 Challenge Assumptions
+
+Питання для перевірки припущень:
+- "Чи точно це потрібно для v1, чи можна відкласти?"
+- "Що станеться, якщо цього НЕ робити?"
+- "Хто конкретно буде цим користуватись?"
+- "Як часто? Скільки даних?"
+- "Що вже є в системі, що можна перевикористати?"
+
+### 1.5 Validate Understanding
+
+Після кожного блоку — підсумок для валідації:
+
+```markdown
+**Моє розуміння:**
+1. Проблема: {X}
+2. Користувачі: {Y}
+3. Очікуваний результат: {Z}
+
+Це правильно? Що пропустив?
+```
 
 ---
 
-## Workflow
+## PHASE 2: Research Codebase
 
-### Phase 1: Initial Understanding
+**Мета:** Знайти існуючі паттерни та уникнути дублювання.
 
-Gather from user:
-
-1. **Problem Statement:** What problem? Who suffers? Consequences of not solving?
-2. **User Stories:** Roles, goals, expected value
-3. **Scope:** Must-have for v1 vs. deferred items
-
-### Phase 2: Research Codebase
-
-Investigate existing code to identify:
-- Related models and their relationships
-- Existing services and architectural patterns
-- Similar feature implementations
-
-Key locations:
-- Models: `epass/app/applications/`
-- Services: `services.py` files in application directories
-- Project conventions: `epass/app/CLAUDE.md`
-
-### Phase 3: Clarify Details
-
-Technical clarification questions:
-
-1. **API:** Endpoints, data format, access control
-2. **Data Model:** Stored data, relationships to existing models
-3. **Integration:** External systems, third-party APIs
-4. **Non-Functional:** Load expectations, performance, security
-
-### Phase 4: Draft Specification
-
-Generate spec.md following template structure:
-- Metadata (status, priority, date)
-- Problem Statement
-- User Stories (As a {role}, I want {goal}, so that {benefit})
-- Functional Requirements (testable, numbered)
-- Out of Scope
-
-### Phase 5: Review and Refine
-
-Present draft to user:
-1. Verify understanding
-2. Clarify ambiguities
-3. Add missing items
-4. Remove unnecessary items
-
-### Phase 6: Save Specification
-
-Create directory structure and save:
+### 2.1 Пошук релевантного коду
 
 ```bash
-# Базовий шлях
-SDD_BASE="aidocs/sdd"
+# Моделі
+Glob: **/models.py
+Grep: class.*Model
 
-# Створити директорії
-mkdir -p ${SDD_BASE}/{project}/features/{feature_name}/tasks/{todo,in_progress,done}
+# Сервіси
+Glob: **/services.py
+Grep: def.*{feature_keyword}
 
-# Зберегти spec.md
-# ${SDD_BASE}/{project}/features/{feature_name}/spec.md
+# Існуючі фічі
+Glob: aidocs/sdd/**/spec.md
 ```
 
-**Повний шлях:** `aidocs/sdd/{project}/features/{feature_name}/spec.md`
+### 2.2 Аналіз паттернів
+
+Запитай себе:
+- Чи є схожа функціональність?
+- Які паттерни використовуються?
+- Що можна перевикористати?
+
+### 2.3 Поділись знахідками
+
+```markdown
+**Знайшов у codebase:**
+- `app/models/Report.py` — вже є базова модель звітів
+- `app/services/export.py` — існуючий експорт в CSV
+- Схожа фіча: `aidocs/sdd/epass/features/analytics/`
+
+Це впливає на наш підхід?
+```
+
+---
+
+## PHASE 3: Clarify Details (Сократівський діалог)
+
+**Мета:** Уточнити технічні деталі через питання, не припущення.
+
+### 3.1 User Stories Workshop
+
+Для кожної ролі:
+```markdown
+**Роль: {role}**
+
+Як {role}, я хочу {goal}, щоб {benefit}.
+
+Питання:
+1. Як часто {role} буде це робити?
+2. Що {role} робить зараз без цієї фічі?
+3. Що станеться, якщо {role} не зможе це зробити?
+```
+
+### 3.2 Edge Cases через питання
+
+Замість припущень — питання:
+- "Що робити, якщо дані невалідні?"
+- "Що робити при великому обсязі (1000+ записів)?"
+- "Що робити при одночасному доступі?"
+- "Що робити, якщо зовнішній сервіс недоступний?"
+
+### 3.3 Priorities через trade-offs
+
+```markdown
+**Trade-off #1:** Швидкість vs Повнота
+- A: Швидкий MVP без кастомізації
+- B: Повна кастомізація, довше робити
+
+**Trade-off #2:** Простота vs Гнучкість
+- A: Жорстка структура, легше підтримувати
+- B: Гнучка конфігурація, складніше
+
+Що важливіше для цієї фічі?
+```
+
+---
+
+## PHASE 4: Draft Specification (секція за секцією)
+
+**Мета:** Створити spec.md з валідацією кожної секції.
+
+### 4.1 Problem Statement
+
+Напиши та покажи:
+```markdown
+## Problem Statement
+
+{Опис проблеми}
+
+**Хто страждає:** {ролі}
+**Наслідки:** {що станеться без рішення}
+
+---
+Це правильно описує проблему?
+```
+
+### 4.2 User Stories
+
+Покажи по одній:
+```markdown
+## User Stories
+
+### US-1: {Назва}
+Як {role}, я хочу {goal}, щоб {benefit}.
+
+**Acceptance Criteria:**
+- [ ] {criterion 1}
+- [ ] {criterion 2}
+
+---
+Ця user story правильна? Додати критерії?
+```
+
+### 4.3 Functional Requirements
+
+Покажи групами:
+```markdown
+## Functional Requirements
+
+### Core
+- FR-1: {requirement} — {rationale}
+- FR-2: {requirement} — {rationale}
+
+### Secondary
+- FR-3: {requirement} — {rationale}
+
+---
+Вимоги повні? Щось зайве?
+```
+
+### 4.4 Out of Scope
+
+Явно визнач межі:
+```markdown
+## Out of Scope
+
+Ця фіча НЕ включає:
+- {exclusion 1} — буде в майбутньому
+- {exclusion 2} — окрема фіча
+- {exclusion 3} — не потрібно
+
+---
+Згоден з межами?
+```
+
+---
+
+## PHASE 5: Final Review
+
+### 5.1 Повний документ
+
+Покажи весь spec.md для фінального review.
+
+### 5.2 Checklist
+
+```markdown
+**Перевірка:**
+- [ ] Problem Statement зрозумілий
+- [ ] User Stories конкретні
+- [ ] Requirements тестуємі
+- [ ] Out of Scope визначений
+- [ ] Пріоритети (MoSCoW) розставлені
+
+Готовий до затвердження?
+```
+
+### 5.3 Save
+
+```bash
+mkdir -p aidocs/sdd/{project}/features/{feature}/tasks/{todo,in_progress,done}
+# Write spec.md
+```
+
+---
+
+## Сократівські питання (шпаргалка)
+
+**Для розуміння проблеми:**
+- Яку проблему вирішуємо?
+- Хто від неї страждає?
+- Що станеться, якщо не вирішимо?
+
+**Для уточнення вимог:**
+- Чому це потрібно?
+- Як це працює зараз?
+- Що зміниться після впровадження?
+
+**Для пріоритизації:**
+- Це обов'язково для v1?
+- Що важливіше: X чи Y?
+- Що можна відкласти?
+
+**Для валідації:**
+- Я правильно зрозумів?
+- Що пропустив?
+- Що зайве?
+
+---
+
+## Anti-patterns
+
+❌ **Припущення замість питань**
+- Погано: "Мабуть, потрібен експорт в PDF"
+- Добре: "Який формат експорту потрібен?"
+
+❌ **Рішення до проблеми**
+- Погано: "Зробимо REST API для..."
+- Добре: "Яку проблему вирішуємо?"
+
+❌ **Великі блоки без валідації**
+- Погано: Весь spec одразу
+- Добре: Секція → валідація → наступна секція
+
+❌ **Ігнорування "не знаю"**
+- Погано: Пропустити питання
+- Добре: Записати в Open Questions
 
 ---
 
 ## Output
 
-File `spec.md` at:
 ```
-aidocs/sdd/{project}/features/{feature_name}/spec.md
-```
-
-**Next step:** Після approve spec.md → використовуй скіл `sdd-writing-design-docs` для створення design.md
-
----
-
-## Requirements Elicitation Techniques
-
-### Interview Methods
-- Open questions: "Describe the problem..."
-- Closed questions: "Is authorization required?"
-- Clarifying: "What do you mean by...?"
-
-### User Stories Format
-```
-As a [role]
-I want [goal]
-So that [benefit]
+aidocs/sdd/{project}/features/{feature}/spec.md
 ```
 
-### MoSCoW Prioritization
-- **Must have** - feature non-functional without it
-- **Should have** - important but deferrable
-- **Could have** - nice to have
-- **Won't have** - explicitly excluded
-
-### Five Whys
-For deeper problem understanding - ask "why" up to 5 times to reach root cause.
+**Next:** Після approve → `sdd-writing-design-docs`
 
 ---
 
-## Questions Checklist
+## Self-Updating
 
-Before completion verify:
-- Problem Statement clear
-- All user roles identified
-- User Stories specific
-- Functional Requirements testable
-- Out of Scope defined
-- API Contract included (if needed)
-- Data Model included (if needed)
-- Open Questions resolved
+Repository: `~/.claude/claudedm/` (faionfaion/claudedm)
+
+```bash
+cp -r ~/.claude/claudedm/skills/sdd-writing-specifications ~/.claude/skills/
+```
 
 ---
 
-## Degrees of Freedom
+## Documentation
 
-The skill implementer decides:
-- Interview depth based on feature complexity
-- Which codebase areas to research
-- Level of technical detail in specification
-- Whether to include Data Model and API Contract sections
-- Task breakdown granularity
-
----
-
-## Failed Attempts
-
-Common mistakes to avoid:
-
-1. **Starting specification before understanding problem** - Always complete Phase 1 interview before drafting
-2. **Skipping codebase research** - Leads to specs that ignore existing patterns or duplicate functionality
-3. **Writing vague requirements** - "Should work fast" is not testable; "Response time under 200ms" is
-4. **Mixing Must-have with Nice-to-have** - Use MoSCoW strictly to prevent scope creep
-5. **Not defining Out of Scope** - Absence of explicit exclusions causes endless feature expansion
-6. **Creating spec without user review** - Always validate draft before saving
-
----
-
-## Sources
-
-- Template: `templates/SPEC_TEMPLATE.md` (in this skill directory)
+- [Skills](https://code.claude.com/docs/en/skills)
+- [Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview)
