@@ -1,5 +1,6 @@
 ---
 name: donexttask
+user-invocable: false
 description: Executes next task from queue fully autonomously via subagent. Picks task, moves to in_progress, executes, documents, commits, moves to done. Returns summary only.
 ---
 

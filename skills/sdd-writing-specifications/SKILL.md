@@ -1,5 +1,6 @@
 ---
 name: sdd-writing-specifications
+user-invocable: false
 description: "SDD Framework: Creates, edits, or updates spec.md with requirements and user stories. Use when user asks to create spec, edit specification, update spec.md, write requirements. Triggers on \"spec.md\", \"specification\", \"специфікація\", \"вимоги\"."
 allowed-tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---

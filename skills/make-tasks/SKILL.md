@@ -1,4 +1,5 @@
 ---
+user-invocable: true
 name: make-tasks
 description: Creates, edits, updates, or modifies task files (TASK_*.md). Use when user asks to create task, edit task, update task, change task, modify task, add task to queue. Triggers on "task", "TASK_", "таска", "завдання".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(mkdir:*), Bash(ls:*), Bash(date:*), Task

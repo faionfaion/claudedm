@@ -1,5 +1,6 @@
 ---
 name: sdd-writing-constitutions
+user-invocable: false
 description: "SDD Framework: Creates, edits, or updates constitution.md with project principles and standards. Use when user asks to create constitution, edit constitution, update project standards. Triggers on \"constitution.md\", \"constitution\", \"конституція проекту\", \"стандарти проекту\"."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(ls:*), Bash(cat:*), Bash(git log:*)
 ---

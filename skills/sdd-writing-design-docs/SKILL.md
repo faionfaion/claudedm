@@ -1,5 +1,6 @@
 ---
 name: sdd-writing-design-docs
+user-invocable: false
 description: "SDD Framework: Creates, edits, or updates design.md with technical implementation. Use when user asks to create design, edit design, update design document, write technical design. Triggers on \"design.md\", \"design document\", \"дизайн документ\", \"технічний дизайн\"."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---

@@ -1,4 +1,5 @@
 ---
+user-invocable: true
 name: make-docs
 description: Creates, edits, updates, or modifies AGENTS.md/CLAUDE.md documentation for Django modules. Use when user asks to create docs, edit docs, update documentation, document module, add AGENTS.md. Triggers on "AGENTS.md", "CLAUDE.md", "documentation", "документація".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(mkdir:*), Bash(ln:*), Bash(ls:*), Bash(wc:*)

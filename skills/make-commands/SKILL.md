@@ -1,4 +1,5 @@
 ---
+user-invocable: true
 name: make-commands
 description: Creates, edits, updates, or modifies Claude Code slash commands. Use when user asks to create command, edit command, update command, change command, modify command, fix command, improve command, add to command. Triggers on "command", "/command", "slash command".
 allowed-tools: Read, Write, Edit, Bash(mkdir:*), Bash(rm:*), Bash(ls:*), Glob
@@ -62,11 +63,25 @@ Instructions using $1, $2, or $ARGUMENTS
 
 ## Frontmatter Fields
 
+**Basic:**
 - `description` - shown in autocomplete
 - `argument-hint` - expected args like `[message]` or `[pr] [priority]`
 - `allowed-tools` - tools without permission
-- `model` - specific model (optional)
-- `disable-model-invocation` - prevent SlashCommand tool from calling (default: false)
+- `model` - specific model: sonnet, opus, haiku
+
+**Visibility (Jan 2026):**
+- `disable-model-invocation: true` - prevent Skill tool from calling
+
+**Hooks (Jan 2026):**
+```yaml
+hooks:
+  PreToolUse:
+    command: "echo 'Before tool'"
+  PostToolUse:
+    command: "echo 'After tool'"
+  Stop:
+    command: "echo 'Command finished'"
+```
 
 All fields optional.
 
@@ -205,6 +220,13 @@ Bad: `MyCommand`, `do_thing`, `cmd1`
 **MCP tools:** Use `ServerName:tool_name`
 
 **model: haiku** for simple commands (faster, cheaper)
+
+---
+
+## Important Note (Jan 2026)
+
+**SlashCommand tool → Skill tool** - unified into single tool.
+Update any permission rules from `SlashCommand` to `Skill`.
 
 ---
 

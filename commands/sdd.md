@@ -1,5 +1,6 @@
 ---
 description: "SDD Workflow Orchestrator - manage projects, features, specs, designs, tasks"
+argument-hint: "[project] or [project/feature]"
 ---
 
 # SDD Workflow Orchestrator

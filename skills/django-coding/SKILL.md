@@ -1,5 +1,6 @@
 ---
 name: django-coding
+user-invocable: false
 description: Universal Django coding guidelines and architecture patterns. Use when writing Django code, creating models, services, API endpoints, tests, or reviewing code quality. Supports Django 4.0+ and 5.x with Python 3.9+.
 ---
 

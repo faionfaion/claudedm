@@ -1,5 +1,6 @@
 ---
 name: epass-devops
+user-invocable: false
 description: "E-Pass CI/CD and DevOps knowledge base. Use for deploy, pipeline, GitLab, runner, docker, ssh, staging, production questions. Triggers on deploy, CI/CD, pipeline, GitLab, docker, ssh."
 ---
 
