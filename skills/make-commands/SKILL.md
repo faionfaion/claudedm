@@ -243,15 +243,7 @@ Repository: `~/.claude/claudedm/` (faionfaion/claudedm on GitHub)
 
 ## Documentation
 
-**Official:**
 - [Slash Commands](https://code.claude.com/docs/en/slash-commands)
-- [Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
-
-**Related:**
 - [Skills](https://code.claude.com/docs/en/skills)
 - [Subagents](https://code.claude.com/docs/en/sub-agents)
 - [Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview)
-
-**Community:**
-- [Skills vs Commands vs Subagents](https://www.youngleaders.tech/p/claude-skills-commands-subagents-plugins)
-- [Claude Code Customization Guide](https://alexop.dev/posts/claude-code-customization-guide-claudemd-skills-subagents/)

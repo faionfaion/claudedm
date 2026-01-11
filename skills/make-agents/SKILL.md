@@ -205,8 +205,8 @@ This skill can update itself. To update:
 
 ## Documentation
 
-- [Claude Code Subagents](https://code.claude.com/docs/en/sub-agents)
+- [Subagents](https://code.claude.com/docs/en/sub-agents)
+- [Skills](https://code.claude.com/docs/en/skills)
+- [Slash Commands](https://code.claude.com/docs/en/slash-commands)
 - [Agent SDK Overview](https://platform.claude.com/docs/en/agent-sdk/overview)
 - [Agent SDK Quickstart](https://platform.claude.com/docs/en/agent-sdk/quickstart)
-- [Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
-- [Awesome Subagents](https://github.com/VoltAgent/awesome-claude-code-subagents)
